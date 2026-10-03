@@ -204,7 +204,10 @@ def build_base(end=DISCOVERY_END, min_adv=3e7, min_age_days=180):
     # signal-day universe (decision at close t): not ST, aged, A-share, liquid, traded today,
     # and executable at next open (can buy at t+1 open)
     entry_ok = shift(B.can_buy_open.astype(np.float32), -1) == 1
-    B.U = (B.valid & ~st & B.age_ok & B.is_a[None, :] & (B.adv20 >= min_adv) & entry_ok)
+    # delisting-consolidation / no-limit regime (high_limit 10000, low_limit 0.01) is not tradable in practice
+    with np.errstate(invalid="ignore", divide="ignore"):
+        B.no_limit = (hl / P["pre_close"] > 1.6) | (ll / P["pre_close"] < 0.4)
+    B.U = (B.valid & ~st & ~B.no_limit & B.age_ok & B.is_a[None, :] & (B.adv20 >= min_adv) & entry_ok)
     B.U[-1] = False
 
     # executable forward returns: buy open t+1, sell first available open at/after t+1+h
@@ -353,3 +356,11 @@ def summarize(B, ics, split="2022-01-01", embargo=25, h_list=(1, 5, 10, 20)):
                          ic_tr=np.nanmean(a), t_tr=nw_t(a, h), ic_va=np.nanmean(b), t_va=nw_t(b, h),
                          n_tr=int((~np.isnan(a)).sum()), n_va=int((~np.isnan(b)).sum())))
     return pl.DataFrame(rows)
+
+
+def make_U(B, min_adv):
+    """Signal-day universe for a given liquidity floor (everything else as in build_base)."""
+    entry_ok = shift(B.can_buy_open.astype(np.float32), -1) == 1
+    U = (B.valid & ~B.st & ~B.no_limit & B.age_ok & B.is_a[None, :] & (B.adv20 >= min_adv) & entry_ok)
+    U[-1] = False
+    return U
