@@ -1,0 +1,102 @@
+{
+  "algorithm": "SHA-256",
+  "file_count": 19,
+  "total_size_bytes": 403144885,
+  "files": [
+    {
+      "path": "data/stock_price_v1/stock_price_2019.parquet",
+      "size_bytes": 36978403,
+      "sha256": "9020aad1f0fadb960b400fef62a4fc5e58d5f124bd99282656312b3d886dffb8"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2020.parquet",
+      "size_bytes": 43077107,
+      "sha256": "29069af3aa14f333a5fbb287862ecf0ae80fea5cdf4f70ba47415ed076025148"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2021.parquet",
+      "size_bytes": 50106630,
+      "sha256": "5a58dc8e865c6e2dbeac50418fd193cad3a79c57c1fc8b63694b06b20781e273"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2022.parquet",
+      "size_bytes": 50990536,
+      "sha256": "d3dbfd10e5038403086715a04b32ff6c4615013168f63066d4c2d4084610479c"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2023.parquet",
+      "size_bytes": 53993146,
+      "sha256": "38c41e101e50bcbbfc25578093475811af8e4927f7d2abd2e0ee38057a46b8ef"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2024.parquet",
+      "size_bytes": 56675022,
+      "sha256": "6942a0b508ff5eedf6a1d5681ecf22bf4ae2ba3cb109d02e73a90f66704813cc"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2025.parquet",
+      "size_bytes": 59004195,
+      "sha256": "a7b631df4a5312f8d66291702e3a4e1c6e163e3c064a20bb05c6f52149c16303"
+    },
+    {
+      "path": "data/stock_price_v1/stock_price_2026.parquet",
+      "size_bytes": 45852392,
+      "sha256": "31af1ba4f6ec8a3c1b9c681f8db45f943ee0de1c7b1c675653d5390d35987c9d"
+    },
+    {
+      "path": "data/research_data_v1_20261002/dividends.parquet",
+      "size_bytes": 1006376,
+      "sha256": "08f24be61c7b6130df1825f52e4da62902e83d238572561fbbfd2b0c3ecd23ca"
+    },
+    {
+      "path": "data/research_data_v1_20261002/industry_intervals.parquet",
+      "size_bytes": 217118,
+      "sha256": "0345b5f53de261031826440556bf4978ec82b673fb699adc76b8a9b089397238"
+    },
+    {
+      "path": "data/research_data_v1_20261002/listing.parquet",
+      "size_bytes": 138972,
+      "sha256": "81a7cc6ed7eac97822d582b48b7e35b9525ff9a378a9974450da71cfd9ead238"
+    },
+    {
+      "path": "data/research_data_v1_20261002/st_daily_intervals.parquet",
+      "size_bytes": 11710,
+      "sha256": "7a90b8ade3c1093b9d9cc22cfcdec3002d9e0ebd0fafceeb3a53d1649be426f5"
+    },
+    {
+      "path": "data/research_data_v1_20261002/st_events.parquet",
+      "size_bytes": 136753,
+      "sha256": "893d0ff623a415d5d860485a1080e248605569a7138220776833c7347d2b69db"
+    },
+    {
+      "path": "data/research_data_v1_20261002/status_intervals.parquet",
+      "size_bytes": 49760,
+      "sha256": "4d1ec7ee42d7edb7a71c057a45941e6784fd6eebd3bcbe955d0dbb0a276d65db"
+    },
+    {
+      "path": "data/research_data_v1_20261002/suspensions.parquet",
+      "size_bytes": 178031,
+      "sha256": "7ebd073f21c0cb5ba759fcba9d7efca680306f2353bc9589d8819afe623234c0"
+    },
+    {
+      "path": "data/research_data_v1_20261002/dividends_source.csv.gz",
+      "size_bytes": 4699163,
+      "sha256": "19e1777c4fe1d161692f24961f94c48fade5ea6e8009cfb6c384d5eaa27b7d0b"
+    },
+    {
+      "path": "data/research_data_v1_20261002/README.md",
+      "size_bytes": 10076,
+      "sha256": "221a8f13cfabaa6b52ee5dd4e6d43ae4618ef8263550eab080f05082108bf2f1"
+    },
+    {
+      "path": "data/research_data_v1_20261002/RESEARCH_USE_NOTES.txt",
+      "size_bytes": 4722,
+      "sha256": "ed7baf4da261d10dc3ef6db2e1298564c7d74224b268ffa7a3e6648c3ad6bb98"
+    },
+    {
+      "path": "data/research_data_v1_20261002/DATA_VALIDATION.json",
+      "size_bytes": 14773,
+      "sha256": "f42afa9d5acb2271096794c697b8bb7a5837131ff5d1f61c850e572f05d28a18"
+    }
+  ]
+}

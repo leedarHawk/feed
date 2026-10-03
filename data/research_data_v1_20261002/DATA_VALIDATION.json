@@ -1,0 +1,564 @@
+{
+  "research_cutoff": "2024-12-31",
+  "future_price_values_read": false,
+  "tables": [
+    {
+      "file": "dividends.parquet",
+      "size_bytes": 1006376,
+      "rows": 82363,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "company_name",
+          "type": "string"
+        },
+        {
+          "name": "report_period_end",
+          "type": "date32[day]"
+        },
+        {
+          "name": "bonus_type",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "board_plan_pub_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "shareholders_plan_pub_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "implementation_pub_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "record_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "ex_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "pay_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "cash_per_10_shares_pretax_cny",
+          "type": "double"
+        },
+        {
+          "name": "cash_per_share_pretax_cny",
+          "type": "double"
+        },
+        {
+          "name": "bonus_shares_per_10",
+          "type": "double"
+        },
+        {
+          "name": "transfer_shares_per_10",
+          "type": "double"
+        },
+        {
+          "name": "shares_added_per_10",
+          "type": "double"
+        },
+        {
+          "name": "share_base_10k_shares",
+          "type": "double"
+        },
+        {
+          "name": "cash_total_10k_cny",
+          "type": "double"
+        }
+      ],
+      "verified_stats": {
+        "rows": 82363,
+        "securities": 5466,
+        "report_period_end__min": "2017-09-30",
+        "report_period_end__max": "2026-09-12",
+        "report_period_end__missing": 0,
+        "report_period_end__through_2024": 66426,
+        "board_plan_pub_date__min": "2017-10-27",
+        "board_plan_pub_date__max": "2026-09-30",
+        "board_plan_pub_date__missing": 0,
+        "board_plan_pub_date__through_2024": 61245,
+        "shareholders_plan_pub_date__min": "2017-12-09",
+        "shareholders_plan_pub_date__max": "2026-10-01",
+        "shareholders_plan_pub_date__missing": 39266,
+        "shareholders_plan_pub_date__through_2024": 31678,
+        "implementation_pub_date__min": "2017-12-26",
+        "implementation_pub_date__max": "2026-10-01",
+        "implementation_pub_date__missing": 50304,
+        "implementation_pub_date__through_2024": 23243,
+        "record_date__min": "2015-07-17",
+        "record_date__max": "2026-10-14",
+        "record_date__missing": 50351,
+        "record_date__through_2024": 23186,
+        "ex_date__min": "2018-01-03",
+        "ex_date__max": "2026-10-15",
+        "ex_date__missing": 50408,
+        "ex_date__through_2024": 23141,
+        "pay_date__min": "2018-01-03",
+        "pay_date__max": "2026-10-15",
+        "pay_date__missing": 50782,
+        "pay_date__through_2024": 22836
+      },
+      "units_check_through_2024": {
+        "rows_checked": 23243,
+        "cash_unit_mismatches": 0,
+        "bonus_transfer_unit_mismatches": 0
+      },
+      "date_sequence_check_through_2024": {
+        "board_after_shareholders_rows": 0,
+        "shareholders_after_implementation_rows": 0,
+        "implementation_after_record_rows": 10,
+        "record_not_before_ex_rows": 0,
+        "pay_before_ex_rows": 0
+      }
+    },
+    {
+      "file": "industry_intervals.parquet",
+      "size_bytes": 217118,
+      "rows": 49717,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "classification_system",
+          "type": "string"
+        },
+        {
+          "name": "industry_code",
+          "type": "string"
+        },
+        {
+          "name": "industry_name",
+          "type": "string"
+        },
+        {
+          "name": "effective_from",
+          "type": "date32[day]"
+        },
+        {
+          "name": "last_observed",
+          "type": "date32[day]"
+        },
+        {
+          "name": "effective_to_exclusive",
+          "type": "date32[day]"
+        }
+      ],
+      "verified_stats": {
+        "rows": 49717,
+        "securities": 5471,
+        "effective_from__min": "2017-01-26",
+        "effective_from__max": "2026-09-30",
+        "effective_from__missing": 0,
+        "effective_from__through_2024": 48004,
+        "last_observed__min": "2017-01-26",
+        "last_observed__max": "2026-09-30",
+        "last_observed__missing": 0,
+        "last_observed__through_2024": 17316,
+        "effective_to_exclusive__min": "2017-02-28",
+        "effective_to_exclusive__max": "2026-09-30",
+        "effective_to_exclusive__missing": 32826,
+        "effective_to_exclusive__through_2024": 16090
+      },
+      "classification_systems": [
+        "jq_l1",
+        "jq_l2",
+        "sw_l1",
+        "sw_l2",
+        "sw_l3",
+        "zjw"
+      ]
+    },
+    {
+      "file": "listing.parquet",
+      "size_bytes": 138972,
+      "rows": 5677,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "security_name",
+          "type": "string"
+        },
+        {
+          "name": "short_name",
+          "type": "string"
+        },
+        {
+          "name": "share_class",
+          "type": "string"
+        },
+        {
+          "name": "exchange",
+          "type": "string"
+        },
+        {
+          "name": "list_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "delist_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "is_delisted",
+          "type": "bool"
+        },
+        {
+          "name": "latest_listing_status",
+          "type": "string"
+        },
+        {
+          "name": "company_name",
+          "type": "string"
+        }
+      ],
+      "verified_stats": {
+        "rows": 5677,
+        "securities": 5677,
+        "list_date__min": "1990-12-01",
+        "list_date__max": "2026-09-30",
+        "list_date__missing": 0,
+        "list_date__through_2024": 5526,
+        "delist_date__min": "1999-07-12",
+        "delist_date__max": "2026-07-17",
+        "delist_date__missing": 5303,
+        "delist_date__through_2024": 322
+      }
+    },
+    {
+      "file": "st_daily_intervals.parquet",
+      "size_bytes": 11710,
+      "rows": 1180,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "st_start_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "last_st_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "st_end_date_exclusive",
+          "type": "date32[day]"
+        },
+        {
+          "name": "st_trading_days",
+          "type": "int64"
+        }
+      ],
+      "verified_stats": {
+        "rows": 1180,
+        "securities": 919,
+        "st_start_date__min": "2011-10-10",
+        "st_start_date__max": "2026-09-30",
+        "st_start_date__missing": 0,
+        "st_start_date__through_2024": 939,
+        "last_st_date__min": "2011-10-25",
+        "last_st_date__max": "2026-09-30",
+        "last_st_date__missing": 0,
+        "last_st_date__through_2024": 810,
+        "st_end_date_exclusive__min": "2011-10-26",
+        "st_end_date_exclusive__max": "2026-09-30",
+        "st_end_date_exclusive__missing": 430,
+        "st_end_date_exclusive__through_2024": 623
+      }
+    },
+    {
+      "file": "st_events.parquet",
+      "size_bytes": 136753,
+      "rows": 11948,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "security_name",
+          "type": "string"
+        },
+        {
+          "name": "announce_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "effective_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "change_type",
+          "type": "string"
+        },
+        {
+          "name": "change_reason",
+          "type": "string"
+        },
+        {
+          "name": "status_after",
+          "type": "string"
+        },
+        {
+          "name": "comments",
+          "type": "string"
+        }
+      ],
+      "verified_stats": {
+        "rows": 11948,
+        "securities": 5707,
+        "announce_date__min": "1990-12-10",
+        "announce_date__max": "2026-09-30",
+        "announce_date__missing": 0,
+        "announce_date__through_2024": 11084,
+        "effective_date__min": "1990-12-10",
+        "effective_date__max": "2026-09-30",
+        "effective_date__missing": 0,
+        "effective_date__through_2024": 11083
+      },
+      "availability_check": {
+        "announcement_after_effective_date_rows": 24,
+        "missing_announce_date_rows": 0
+      }
+    },
+    {
+      "file": "status_intervals.parquet",
+      "size_bytes": 49760,
+      "rows": 9911,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "start_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "end_date_exclusive",
+          "type": "date32[day]"
+        }
+      ],
+      "verified_stats": {
+        "rows": 9911,
+        "securities": 5635,
+        "start_date__min": "1990-12-10",
+        "start_date__max": "2026-09-30",
+        "start_date__missing": 0,
+        "start_date__through_2024": 9212,
+        "end_date_exclusive__min": "1991-01-14",
+        "end_date_exclusive__max": "2026-09-30",
+        "end_date_exclusive__missing": 5635,
+        "end_date_exclusive__through_2024": 3745
+      }
+    },
+    {
+      "file": "suspensions.parquet",
+      "size_bytes": 178031,
+      "rows": 22555,
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "suspend_start_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "last_suspended_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "resume_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "suspended_trading_days",
+          "type": "int64"
+        },
+        {
+          "name": "still_suspended_at_data_end",
+          "type": "bool"
+        }
+      ],
+      "verified_stats": {
+        "rows": 22555,
+        "securities": 3410,
+        "suspend_start_date__min": "2011-10-10",
+        "suspend_start_date__max": "2026-09-30",
+        "suspend_start_date__missing": 0,
+        "suspend_start_date__through_2024": 21530,
+        "last_suspended_date__min": "2011-10-10",
+        "last_suspended_date__max": "2026-09-30",
+        "last_suspended_date__missing": 0,
+        "last_suspended_date__through_2024": 21517,
+        "resume_date__min": "2011-10-11",
+        "resume_date__max": "2026-09-30",
+        "resume_date__missing": 182,
+        "resume_date__through_2024": 21379
+      }
+    }
+  ],
+  "raw_dividend_source": {
+    "file_name": "research_data_v1_20261002_dividends_source.csv.gz",
+    "rows": 155175,
+    "fields": [
+      "company_name",
+      "code",
+      "report_date",
+      "bonus_type",
+      "board_plan_pub_date",
+      "board_plan_bonusnote",
+      "distributed_share_base_board",
+      "shareholders_plan_pub_date",
+      "shareholders_plan_bonusnote",
+      "distributed_share_base_shareholders",
+      "implementation_pub_date",
+      "implementation_bonusnote",
+      "distributed_share_base_implement",
+      "dividend_ratio",
+      "transfer_ratio",
+      "bonus_ratio_rmb",
+      "bonus_ratio_usd",
+      "bonus_ratio_hkd",
+      "at_bonus_ratio_rmb",
+      "exchange_rate",
+      "dividend_number",
+      "transfer_number",
+      "bonus_amount_rmb",
+      "a_registration_date",
+      "b_registration_date",
+      "a_xr_date",
+      "b_xr_baseday",
+      "b_final_trade_date",
+      "a_bonus_date",
+      "b_bonus_date",
+      "dividend_arrival_date",
+      "a_increment_listing_date",
+      "b_increment_listing_date",
+      "total_capital_before_transfer",
+      "total_capital_after_transfer",
+      "float_capital_before_transfer",
+      "float_capital_after_transfer",
+      "note",
+      "a_transfer_arrival_date",
+      "b_transfer_arrival_date",
+      "b_dividend_arrival_date",
+      "note_of_no_dividend",
+      "plan_progress_code",
+      "plan_progress",
+      "bonus_cancel_pub_date"
+    ],
+    "date_coverage": {
+      "report_date": {
+        "min": "1990-12-31",
+        "max": "2026-09-12"
+      },
+      "board_plan_pub_date": {
+        "min": "1990-12-31",
+        "max": "2026-09-30"
+      },
+      "shareholders_plan_pub_date": {
+        "min": "1991-04-17",
+        "max": "2026-10-01"
+      },
+      "implementation_pub_date": {
+        "min": "1991-02-27",
+        "max": "2026-10-01"
+      },
+      "a_registration_date": {
+        "min": "1991-04-30",
+        "max": "2026-10-14"
+      },
+      "a_xr_date": {
+        "min": "1991-05-02",
+        "max": "2026-10-15"
+      },
+      "a_bonus_date": {
+        "min": "1992-11-10",
+        "max": "2026-10-15"
+      },
+      "a_increment_listing_date": {
+        "min": "1991-05-02",
+        "max": "2026-10-13"
+      },
+      "a_transfer_arrival_date": {
+        "min": "2006-03-13",
+        "max": "2026-10-13"
+      },
+      "dividend_arrival_date": {
+        "min": "1992-11-10",
+        "max": "2026-07-28"
+      },
+      "bonus_cancel_pub_date": {
+        "min": "1997-03-01",
+        "max": "2023-11-01"
+      },
+      "b_registration_date": {
+        "min": "1993-04-23",
+        "max": "2026-10-16"
+      },
+      "b_xr_baseday": {
+        "min": "1993-04-26",
+        "max": "2026-10-14"
+      },
+      "b_final_trade_date": {
+        "min": "1993-05-21",
+        "max": "2026-10-13"
+      },
+      "b_increment_listing_date": {
+        "min": "1993-04-26",
+        "max": "2026-06-29"
+      },
+      "b_bonus_date": {
+        "min": "1993-04-30",
+        "max": "2026-10-26"
+      },
+      "b_transfer_arrival_date": {
+        "min": "2006-06-16",
+        "max": "2023-06-05"
+      },
+      "b_dividend_arrival_date": {
+        "min": "1993-04-30",
+        "max": "2026-06-26"
+      }
+    },
+    "removed_fields": [
+      "id",
+      "company_id"
+    ],
+    "bonus_cancel_pub_date_present": true,
+    "no_revision_timestamp_field": true
+  },
+  "pit_financial_statements_present": false,
+  "source_claims_not_independently_recomputed": [
+    "README ST completeness 96.4%",
+    "README overlapping status/suspension comparisons",
+    "README dividend pre_close comparisons"
+  ]
+}
