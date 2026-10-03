@@ -35,8 +35,11 @@ def zrank(x, U):
         return (2.0 * r / np.maximum(n - 1, 1) - 1.0).astype(np.float32)
 
 
-def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=None, return_weights=False):
-    """score[t] is known at the close of t. Returns dict with daily net returns, turnover, etc."""
+def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=None, return_weights=False,
+        exposure=None):
+    """score[t] is known at the close of t. Returns dict with daily net returns, turnover, etc.
+    exposure[t] (optional, known at the close of t) is the target gross weight for trades at t+1;
+    a change in exposure forces a rebalance on the next open."""
     U = B.U if U is None else U
     dates = B.dates
     t0 = int(np.searchsorted(dates, np.datetime64(start)))
@@ -49,6 +52,7 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
     rets, tov_buy, tov_sell, n_pos, held_blocked = [], [], [], [], []
     wlog = [] if return_weights else None
     bench = []
+    last_expo = None
     for t in range(max(t0, 1), t1):
         # 1. overnight
         g = float(w @ on[t])
@@ -57,7 +61,9 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         nav_mult = 1.0 + g
         sb = ss = 0.0
         # 2. rebalance
-        if (t - max(t0, 1)) % rebal == 0:
+        expo = 1.0 if exposure is None else float(exposure[t - 1])
+        if (t - max(t0, 1)) % rebal == 0 or (last_expo is not None and expo != last_expo):
+            last_expo = expo
             s = score[t - 1]
             elig = U[t - 1] & ~np.isnan(s)
             idx = np.where(elig)[0]
@@ -76,7 +82,7 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
                         chosen.append(j)
                         cs.add(j)
                 target = np.zeros(N)
-                target[chosen] = 1.0 / n_hold
+                target[chosen] = expo / n_hold
                 d = target - w
                 buy = (d > 1e-12) & B.can_buy_open[t]
                 sell = (d < -1e-12) & B.can_sell_open[t]
