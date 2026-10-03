@@ -36,10 +36,11 @@ def zrank(x, U):
 
 
 def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=None, return_weights=False,
-        exposure=None):
+        exposure=None, regime=None):
     """score[t] is known at the close of t. Returns dict with daily net returns, turnover, etc.
     exposure[t] (optional, known at the close of t) is the target gross weight for trades at t+1;
-    a change in exposure forces a rebalance on the next open."""
+    a change in exposure forces a rebalance on the next open. A change in `regime[t]` (any label array,
+    known at the close of t) also forces a rebalance, e.g. when the score switches between two models."""
     U = B.U if U is None else U
     dates = B.dates
     t0 = int(np.searchsorted(dates, np.datetime64(start)))
@@ -53,6 +54,7 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
     wlog = [] if return_weights else None
     bench = []
     last_expo = None
+    last_reg = None
     for t in range(max(t0, 1), t1):
         # 1. overnight
         g = float(w @ on[t])
@@ -62,8 +64,11 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         sb = ss = 0.0
         # 2. rebalance
         expo = 1.0 if exposure is None else float(exposure[t - 1])
-        if (t - max(t0, 1)) % rebal == 0 or (last_expo is not None and expo != last_expo):
+        reg = None if regime is None else regime[t - 1]
+        if ((t - max(t0, 1)) % rebal == 0 or (last_expo is not None and expo != last_expo)
+                or (last_reg is not None and reg != last_reg)):
             last_expo = expo
+            last_reg = reg
             s = score[t - 1]
             elig = U[t - 1] & ~np.isnan(s)
             idx = np.where(elig)[0]
