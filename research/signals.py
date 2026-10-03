@@ -16,10 +16,11 @@ def train_signs(ics, dates, factors, split="2022-01-01", embargo=25, h=10):
     return {f: float(np.sign(np.nanmean(ics[(f, h)][:max(s - embargo, 0)]))) for f in factors}
 
 
-def composite(B, F, signs, families=FAMILIES, weights=None):
+def composite(B, F, signs, families=FAMILIES, weights=None, U=None):
+    U = B.U if U is None else U
     fam_scores = []
     for fam, names in families.items():
-        z = [signs[n] * backtest.zrank(F[n], B.U) for n in names]
+        z = [signs[n] * backtest.zrank(F[n], U) for n in names]
         fam_scores.append((weights or {}).get(fam, 1.0) * np.nanmean(np.stack(z), axis=0))
     return np.nanmean(np.stack(fam_scores), axis=0)
 
@@ -35,3 +36,43 @@ def tilted(B, F, signs, U, tilt, junk_cut=0.3, base_families=FAMILIES):
     score = (1 - tilt) * comp_r + tilt * small
     score = np.where(comp_r > (2 * junk_cut - 1), score, np.nan)   # junk filter
     return score
+
+
+def neutralize(f, U, controls):
+    """Daily cross-sectional OLS residual of rank(f) on ranks of `controls`, inside U."""
+    y = backtest.zrank(f, U)
+    Xc = [backtest.zrank(c, U) for c in controls]
+    m = U & ~np.isnan(y)
+    for x in Xc:
+        m &= ~np.isnan(x)
+    X = np.stack([m.astype(np.float64)] + [np.where(m, x, 0.0) for x in Xc])
+    k = X.shape[0]
+    XtX = np.einsum("itn,jtn->tij", X, X) + np.eye(k)[None] * 1e-9
+    Xty = np.einsum("itn,tn->ti", X, np.where(m, y, 0.0))
+    beta = np.linalg.solve(XtX, Xty[..., None])[..., 0]
+    r = y - np.einsum("ti,itn->tn", beta, X)
+    r[~m] = np.nan
+    return r
+
+
+def size_neutral(B, F, signs, U, n_buckets=10, junk_cut=0.3):
+    """Score = mean of size/liquidity-neutral (-vwapdev20, -maxr60); drop the worst `junk_cut`
+    by the neutralised family composite; then convert to within-size-decile percentiles so a
+    top-N pick takes ~N/n_buckets names from every size decile."""
+    from lib import rank_rows
+    ctrl = [F["lmcap"], F["lmoney20"]]
+    a = backtest.zrank(neutralize(-F["vwapdev20"], U, ctrl), U)
+    b = backtest.zrank(neutralize(-F["maxr60"], U, ctrl), U)
+    score = np.nanmean(np.stack([a, b]), axis=0)
+    junk = backtest.zrank(neutralize(composite(B, F, signs, U=U), U, ctrl), U)
+    score = np.where(junk > 2 * junk_cut - 1, score, np.nan)
+    zs = backtest.zrank(F["lmcap"], U)
+    bucket = np.clip(np.floor((zs + 1) / 2 * n_buckets), 0, n_buckets - 1)
+    out = np.full(score.shape, np.nan, dtype=np.float32)
+    for k in range(n_buckets):
+        x = np.where(bucket == k, score, np.nan)
+        r = rank_rows(x)
+        n = np.sum(~np.isnan(r), axis=1, keepdims=True)
+        pct = r / np.maximum(n - 1, 1)
+        out = np.where(np.isnan(pct), out, pct)
+    return out
