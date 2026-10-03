@@ -1,0 +1,56 @@
+  fit 1: train rows 238,014 (days<2020-02-26), predict 2020-04-01..2020-07-06
+  fit 2: train rows 310,799 (days<2020-05-29), predict 2020-07-07..2020-10-09
+  fit 3: train rows 384,039 (days<2020-08-28), predict 2020-10-12..2021-01-07
+  fit 4: train rows 458,281 (days<2020-12-03), predict 2021-01-08..2021-04-14
+  fit 5: train rows 532,909 (days<2021-03-10), predict 2021-04-15..2021-07-16
+  fit 6: train rows 610,459 (days<2021-06-11), predict 2021-07-19..2021-10-22
+  fit 7: train rows 690,772 (days<2021-09-09), predict 2021-10-25..2022-01-20
+  fit 8: train rows 773,897 (days<2021-12-16), predict 2022-01-21..2022-04-28
+  fit 9: train rows 861,687 (days<2022-03-23), predict 2022-04-29..2022-08-01
+  fit 10: train rows 950,630 (days<2022-06-28), predict 2022-08-02..2022-11-04
+  fit 11: train rows 1,042,617 (days<2022-09-26), predict 2022-11-07..2023-02-09
+  fit 12: train rows 1,135,771 (days<2022-12-29), predict 2023-02-10..2023-05-15
+  fit 13: train rows 1,231,366 (days<2023-04-06), predict 2023-05-16..2023-08-14
+  fit 14: train rows 1,328,795 (days<2023-07-11), predict 2023-08-15..2023-11-17
+  fit 15: train rows 1,428,051 (days<2023-10-16), predict 2023-11-20..2023-12-29
+walk-forward done 322s
+top feature importance (gain share): {'ivol20': np.float64(0.088), 'ret1': np.float64(0.041), 'lprice': np.float64(0.036), 'turn5': np.float64(0.036), 'vol120': np.float64(0.03), 'vol10': np.float64(0.03), 'turnr5_60': np.float64(0.03), 'mom120_20': np.float64(0.026), 'range5': np.float64(0.026), 'mom250_20': np.float64(0.025), 'ret120': np.float64(0.023), 'lmcap': np.float64(0.022)}
+OOS rank-IC h=5: mean 0.0981  NW-t 14.8   (hand-built composite for reference below)
+
+[ML walk-forward] top100 reb5
+   2020-04..2021-12   ann  +49.7%  vol 19.5%  sharpe  2.16  mdd -10.0%  | bench +23.9%  excess +25.8%  | buy-turn/yr  27.6x
+   2022-2023          ann   +8.8%  vol 21.7%  sharpe  0.50  mdd -27.0%  | bench  -4.0%  excess +12.8%  | buy-turn/yr  22.2x
+   ALL OOS            ann  +26.3%  vol 20.7%  sharpe  1.23  mdd -27.0%  | bench  +8.2%  excess +18.2%  | buy-turn/yr  24.8x
+   by year: {2020: '+40%/+19%', 2021: '+41%/+21%', 2022: '-1%/-13%', 2023: '+19%/+6%'}
+
+[ML walk-forward] top50 reb5
+   2020-04..2021-12   ann  +41.7%  vol 20.5%  sharpe  1.81  mdd -12.3%  | bench +23.9%  excess +17.8%  | buy-turn/yr  30.3x
+   2022-2023          ann   +6.8%  vol 22.3%  sharpe  0.41  mdd -28.9%  | bench  -4.0%  excess +10.8%  | buy-turn/yr  24.9x
+   ALL OOS            ann  +22.0%  vol 21.5%  sharpe  1.03  mdd -28.9%  | bench  +8.2%  excess +13.8%  | buy-turn/yr  27.4x
+   by year: {2020: '+35%/+19%', 2021: '+34%/+21%', 2022: '-6%/-13%', 2023: '+21%/+6%'}
+
+[ML walk-forward] top100 reb10
+   2020-04..2021-12   ann  +48.7%  vol 19.7%  sharpe  2.11  mdd  -9.4%  | bench +23.9%  excess +24.8%  | buy-turn/yr  16.0x
+   2022-2023          ann  +16.6%  vol 22.0%  sharpe  0.81  mdd -24.8%  | bench  -4.0%  excess +20.6%  | buy-turn/yr  13.6x
+   ALL OOS            ann  +30.7%  vol 21.0%  sharpe  1.38  mdd -24.8%  | bench  +8.2%  excess +22.5%  | buy-turn/yr  14.7x
+   by year: {2020: '+43%/+19%', 2021: '+37%/+21%', 2022: '+4%/-13%', 2023: '+29%/+6%'}
+
+[hand composite (spec A)] top100 reb5
+   2020-04..2021-12   ann  +35.8%  vol 16.7%  sharpe  1.92  mdd -21.2%  | bench +23.9%  excess +11.9%  | buy-turn/yr  16.9x
+   2022-2023          ann  +21.2%  vol 21.4%  sharpe  1.01  mdd -23.5%  | bench  -4.0%  excess +25.2%  | buy-turn/yr  13.4x
+   ALL OOS            ann  +27.8%  vol 19.3%  sharpe  1.37  mdd -23.5%  | bench  +8.2%  excess +19.7%  | buy-turn/yr  15.0x
+   by year: {2020: '+26%/+19%', 2021: '+34%/+21%', 2022: '+8%/-13%', 2023: '+34%/+6%'}
+
+[hand composite (spec A)] top50 reb5
+   2020-04..2021-12   ann  +35.7%  vol 16.8%  sharpe  1.90  mdd -23.3%  | bench +23.9%  excess +11.8%  | buy-turn/yr  24.0x
+   2022-2023          ann  +19.6%  vol 21.5%  sharpe  0.94  mdd -24.6%  | bench  -4.0%  excess +23.7%  | buy-turn/yr  19.1x
+   ALL OOS            ann  +26.9%  vol 19.4%  sharpe  1.33  mdd -24.6%  | bench  +8.2%  excess +18.8%  | buy-turn/yr  21.4x
+   by year: {2020: '+25%/+19%', 2021: '+34%/+21%', 2022: '+6%/-13%', 2023: '+34%/+6%'}
+
+[hand composite (spec A)] top100 reb10
+   2020-04..2021-12   ann  +37.3%  vol 16.8%  sharpe  1.97  mdd -20.2%  | bench +23.9%  excess +13.4%  | buy-turn/yr  13.0x
+   2022-2023          ann  +21.2%  vol 21.4%  sharpe  1.01  mdd -23.7%  | bench  -4.0%  excess +25.2%  | buy-turn/yr  10.8x
+   ALL OOS            ann  +28.5%  vol 19.4%  sharpe  1.39  mdd -23.7%  | bench  +8.2%  excess +20.3%  | buy-turn/yr  11.9x
+   by year: {2020: '+27%/+19%', 2021: '+35%/+21%', 2022: '+10%/-13%', 2023: '+31%/+6%'}
+
+[exited with code 0]

@@ -1,0 +1,41 @@
+scores ready 477s
+
+[hand_top100_reb5]
+   DEV-OOS 2020-04..2023-12   ann  +27.8%  vol 19.3%  sharpe  1.37  mdd -23.5%  | bench  +8.2%  excess +19.7%  | buy-turn/yr  15.0x
+   HOLDOUT 2024               ann   -0.3%  vol 41.0%  sharpe  0.20  mdd -39.1%  | bench  -0.5%  excess  +0.2%  | buy-turn/yr  13.2x
+   FULL 2020-04..2024-12      ann  +21.3%  vol 25.4%  sharpe  0.89  mdd -39.6%  | bench  +6.3%  excess +15.0%  | buy-turn/yr  14.6x
+   HOLDOUT 2024, slippage 20bp ann   -2.9%  vol 41.0%  sharpe  0.13  mdd -39.3%  | bench  -0.5%  excess  -2.4%  | buy-turn/yr  13.2x
+   by year (strat/bench): {2020: '+26%/+19%', 2021: '+34%/+21%', 2022: '+8%/-13%', 2023: '+34%/+6%', 2024: '-0%/-1%'}
+   2024 monthly strat: 01:-21% 02:-2% 03:+5% 04:+1% 05:-1% 06:-8% 07:-1% 08:-1% 09:+21% 10:+9% 11:+11% 12:-6%
+   2024 monthly bench: 01:-19% 02:+6% 03:+4% 04:-1% 05:-1% 06:-8% 07:+0% 08:-4% 09:+23% 10:+5% 11:+4% 12:-5%
+
+[hand_top100_reb10]
+   DEV-OOS 2020-04..2023-12   ann  +28.5%  vol 19.4%  sharpe  1.39  mdd -23.7%  | bench  +8.2%  excess +20.3%  | buy-turn/yr  11.9x
+   HOLDOUT 2024               ann   -2.7%  vol 40.8%  sharpe  0.14  mdd -38.7%  | bench  -0.5%  excess  -2.2%  | buy-turn/yr  10.2x
+   FULL 2020-04..2024-12      ann  +21.2%  vol 25.4%  sharpe  0.89  mdd -39.3%  | bench  +6.3%  excess +14.9%  | buy-turn/yr  11.5x
+   HOLDOUT 2024, slippage 20bp ann   -4.7%  vol 40.7%  sharpe  0.09  mdd -38.8%  | bench  -0.5%  excess  -4.2%  | buy-turn/yr  10.3x
+   by year (strat/bench): {2020: '+27%/+19%', 2021: '+35%/+21%', 2022: '+10%/-13%', 2023: '+31%/+6%', 2024: '-3%/-1%'}
+   2024 monthly strat: 01:-21% 02:-1% 03:+5% 04:+1% 05:-1% 06:-9% 07:-1% 08:-1% 09:+21% 10:+7% 11:+10% 12:-6%
+   2024 monthly bench: 01:-19% 02:+6% 03:+4% 04:-1% 05:-1% 06:-8% 07:+0% 08:-4% 09:+23% 10:+5% 11:+4% 12:-5%
+
+[ml_top100_reb5]
+   DEV-OOS 2020-04..2023-12   ann  +26.3%  vol 20.7%  sharpe  1.23  mdd -27.0%  | bench  +8.2%  excess +18.2%  | buy-turn/yr  24.8x
+   HOLDOUT 2024               ann   -3.1%  vol 41.6%  sharpe  0.13  mdd -46.8%  | bench  -0.5%  excess  -2.6%  | buy-turn/yr  23.5x
+   FULL 2020-04..2024-12      ann  +19.5%  vol 26.5%  sharpe  0.81  mdd -46.8%  | bench  +6.3%  excess +13.2%  | buy-turn/yr  24.5x
+   HOLDOUT 2024, slippage 20bp ann   -7.6%  vol 41.5%  sharpe  0.02  mdd -47.0%  | bench  -0.5%  excess  -7.0%  | buy-turn/yr  23.5x
+   by year (strat/bench): {2020: '+40%/+19%', 2021: '+41%/+21%', 2022: '-1%/-13%', 2023: '+19%/+6%', 2024: '-3%/-1%'}
+   2024 monthly strat: 01:-22% 02:-2% 03:+11% 04:+3% 05:-2% 06:-3% 07:+2% 08:-5% 09:+14% 10:+2% 11:+6% 12:-3%
+   2024 monthly bench: 01:-19% 02:+6% 03:+4% 04:-1% 05:-1% 06:-8% 07:+0% 08:-4% 09:+23% 10:+5% 11:+4% 12:-5%
+
+[ml_top100_reb10]
+   DEV-OOS 2020-04..2023-12   ann  +30.7%  vol 21.0%  sharpe  1.38  mdd -24.8%  | bench  +8.2%  excess +22.5%  | buy-turn/yr  14.7x
+   HOLDOUT 2024               ann   -1.7%  vol 40.5%  sharpe  0.16  mdd -44.7%  | bench  -0.5%  excess  -1.1%  | buy-turn/yr  15.1x
+   FULL 2020-04..2024-12      ann  +23.1%  vol 26.3%  sharpe  0.92  mdd -44.7%  | bench  +6.3%  excess +16.8%  | buy-turn/yr  14.8x
+   HOLDOUT 2024, slippage 20bp ann   -4.6%  vol 40.4%  sharpe  0.09  mdd -44.8%  | bench  -0.5%  excess  -4.0%  | buy-turn/yr  15.1x
+   by year (strat/bench): {2020: '+43%/+19%', 2021: '+37%/+21%', 2022: '+4%/-13%', 2023: '+29%/+6%', 2024: '-2%/-1%'}
+   2024 monthly strat: 01:-21% 02:+0% 03:+10% 04:+0% 05:-1% 06:-4% 07:+4% 08:-5% 09:+13% 10:+4% 11:+6% 12:-3%
+   2024 monthly bench: 01:-19% 02:+6% 03:+4% 04:-1% 05:-1% 06:-8% 07:+0% 08:-4% 09:+23% 10:+5% 11:+4% 12:-5%
+
+done
+
+[exited with code 0]
