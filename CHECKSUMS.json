@@ -1,7 +1,7 @@
 {
   "algorithm": "SHA-256",
-  "file_count": 61,
-  "total_size_bytes": 1060503083,
+  "file_count": 62,
+  "total_size_bytes": 1060712710,
   "files": [
     {
       "path": "data/stock_price_v1/stock_price_2019.parquet",
@@ -307,6 +307,11 @@
       "path": "data/fundamentals_v1_20261004/valuation_daily_2026.parquet",
       "size_bytes": 28540592,
       "sha256": "a384f272882f26512f7c124f68bd9d6141ef74c3e1453411479b3a8daeb5ae2d"
+    },
+    {
+      "path": "data/sse_index_v1_20261004/sse_daily.parquet",
+      "size_bytes": 209627,
+      "sha256": "2d145d740e57774a63cfa3896f05762ff215e6f45a96b0a343f01351c9bbba3c"
     }
   ]
 }
