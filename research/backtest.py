@@ -42,7 +42,9 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
     a change in exposure forces a rebalance on the next open. A change in `regime[t]` (any label array,
     known at the close of t) also forces a rebalance, e.g. when the score switches between two models.
     exposure_trade: "reselect" re-runs name selection when exposure changes; "rescale" keeps the
-    current names and scales every position to the new exposure (used for gradual de-risking)."""
+    current names and scales every position to the new exposure (used for gradual de-risking); "names"
+    holds round(exposure*n_hold) names at 1/n_hold each and, between rebalances, sells the worst-scored
+    holdings or buys the best-ranked new names as whole positions (executable with board lots)."""
     U = B.U if U is None else U
     dates = B.dates
     t0 = int(np.searchsorted(dates, np.datetime64(start)))
@@ -71,6 +73,8 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         expo_chg = last_expo is not None and expo != last_expo
         reg_chg = last_reg is not None and reg != last_reg
         target = None
+        n_sel = int(round(expo * n_hold)) if exposure_trade == "names" else n_hold
+        held = np.where(w > 1e-9)[0]
         if scheduled or reg_chg or (expo_chg and exposure_trade == "reselect"):
             last_expo = expo
             last_reg = reg
@@ -82,17 +86,31 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
                 rank = np.full(N, np.inf)
                 rank[order] = np.arange(len(order))
                 keep = np.where((w > 0) & (rank <= buffer * n_hold))[0]
-                keep = keep[np.argsort(rank[keep])][:n_hold]
+                keep = keep[np.argsort(rank[keep])][:n_sel]
                 chosen = list(keep)
                 cs = set(chosen)
                 for j in order:
-                    if len(chosen) >= n_hold:
+                    if len(chosen) >= n_sel:
                         break
                     if j not in cs:
                         chosen.append(j)
                         cs.add(j)
                 target = np.zeros(N)
-                target[chosen] = expo / n_hold
+                target[chosen] = (1.0 / n_hold) if exposure_trade == "names" else (expo / n_hold)
+        elif exposure_trade == "names" and len(held) != n_sel:
+            last_expo = expo
+            s = score[t - 1]
+            target = w.copy()
+            if len(held) > n_sel:
+                sc = np.where(np.isnan(s[held]), -np.inf, s[held])
+                worst = held[np.argsort(sc, kind="stable")]
+                worst = worst[B.can_sell_open[t][worst]]
+                target[worst[:len(held) - n_sel]] = 0.0
+            else:
+                elig = U[t - 1] & ~np.isnan(s) & (w <= 1e-9) & B.can_buy_open[t]
+                idx = np.where(elig)[0]
+                best = idx[np.argsort(-s[idx], kind="stable")][:n_sel - len(held)]
+                target[best] = 1.0 / n_hold
         elif expo_chg and exposure_trade == "rescale":
             # keep the same names, scale every position to the new gross exposure
             last_expo = expo
