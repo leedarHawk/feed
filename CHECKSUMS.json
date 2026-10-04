@@ -1,7 +1,7 @@
 {
   "algorithm": "SHA-256",
-  "file_count": 41,
-  "total_size_bytes": 517933949,
+  "file_count": 61,
+  "total_size_bytes": 1060503083,
   "files": [
     {
       "path": "data/stock_price_v1/stock_price_2019.parquet",
@@ -207,6 +207,106 @@
       "path": "data/smallcap_risk_v1_20261004/margin_total_daily.parquet",
       "size_bytes": 113172,
       "sha256": "a574807a1fc28ab1938a221e9ad32099c8904969565e0b77cbc12df1be426c2c"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/README.md",
+      "size_bytes": 8975,
+      "sha256": "cf377fa244172c74758614a198ce1614d0c892c71d516399a6ede188e3046bfa"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/balance.parquet",
+      "size_bytes": 68040444,
+      "sha256": "ef8faabe349d610bb36e5d1d5f7be90fa2f9430e362e57fc7e6a2ae0f2a4a2ed"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/cashflow.parquet",
+      "size_bytes": 58344902,
+      "sha256": "ec472b375adef498c037def84f2dafb9fedd33a00416358dd3fc9f07858f110d"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/financials_pit.parquet",
+      "size_bytes": 41538196,
+      "sha256": "6b9eb885acdf61514207b03c906b7277fbfce3b85447c9d4dc19e01f1df156eb"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/forecast.parquet",
+      "size_bytes": 3070738,
+      "sha256": "d5e300a7138137ca22c2510a0367b1ee97d14e9634273d4c2347ef93bc229a55"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/holder_num.parquet",
+      "size_bytes": 2126451,
+      "sha256": "27ff136c56c0346e29d6f5c0d7e5bd3785439f6778bbcd5d5749a0342d23ba5f"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/income.parquet",
+      "size_bytes": 48968527,
+      "sha256": "a1a16ca8ac6e8ee972899ff61386e65dc169885d9db6dcc6802f7ce9ee2ece31"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/indicator.parquet",
+      "size_bytes": 20799619,
+      "sha256": "97a0768c2270dffa908938e19db1d768af2711fe9e5a1980f602728086c42071"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/unlimit_events.parquet",
+      "size_bytes": 715522,
+      "sha256": "2fa88e15dd1371f79c8c5e12948ad11f5ce3841069514864381fd5c2bfe2c215"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/unlimit_schedule.parquet",
+      "size_bytes": 832590,
+      "sha256": "e96389ed3ab3b40ca5fff463e856e95e3f6c5479ed2b035e9a803aa2641faa47"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2017.parquet",
+      "size_bytes": 21809112,
+      "sha256": "e32f9c27f30e3b6f2764f7881404acd62fef045dc0b1e7364874f84384228d12"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2018.parquet",
+      "size_bytes": 23538983,
+      "sha256": "388304c8112ccc0c8907ef8fccbd252e849f125e724823811fd6e7eedafb051a"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2019.parquet",
+      "size_bytes": 25095506,
+      "sha256": "563b0f1d8791f25904f1095ddaf6d1a370eb56ee2357f6b4d0ccaf5b77f61af7"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2020.parquet",
+      "size_bytes": 27503156,
+      "sha256": "04340642e7e824cd81a8017e2c70afa0b93c02d72bbfa26507f6bf9876c457c0"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2021.parquet",
+      "size_bytes": 30770757,
+      "sha256": "0204db44f13e9d02a1d7c7391b478219e87a98e58ae48ba0ce6bcf6bd0e08825"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2022.parquet",
+      "size_bytes": 33516854,
+      "sha256": "489a5a181891c1bdbdd71e6a28d395068cbe325a533d5f78b1a7eaeeffff0e12"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2023.parquet",
+      "size_bytes": 34597745,
+      "sha256": "abb04e84dbf263ae7366801620d73416d8fd6282bb2873688295a210e234f50a"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2024.parquet",
+      "size_bytes": 36147623,
+      "sha256": "d3e7abb32dd87070ba8f13d99bde8cfe322bf75f294d6c624267ed9355889f29"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2025.parquet",
+      "size_bytes": 36602842,
+      "sha256": "6326fe46048f59c6739ec9e59136a2f0f06ae850fba51dece25f5607adc96842"
+    },
+    {
+      "path": "data/fundamentals_v1_20261004/valuation_daily_2026.parquet",
+      "size_bytes": 28540592,
+      "sha256": "a384f272882f26512f7c124f68bd9d6141ef74c3e1453411479b3a8daeb5ae2d"
     }
   ]
 }
