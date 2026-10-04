@@ -21,9 +21,13 @@ class Costs:
     stamp_old: float = 0.0010            # sells before 2023-08-28
     stamp_new: float = 0.0005            # sells from 2023-08-28
     stamp_change: str = "2023-08-28"
+    capital: float = 0.0                 # CNY; 0 disables min-fee / board-lot modelling
+    min_fee: float = 5.0                 # minimum commission per order, CNY (only if capital > 0)
+    lot: int = 100                       # board lot; partial trades smaller than one lot are skipped
 
     def scaled(self, k):
-        return Costs(self.commission * k, self.slippage * k, self.stamp_old, self.stamp_new, self.stamp_change)
+        return Costs(self.commission * k, self.slippage * k, self.stamp_old, self.stamp_new, self.stamp_change,
+                     self.capital, self.min_fee, self.lot)
 
 
 def zrank(x, U):
@@ -59,6 +63,8 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
     bench = []
     last_expo = None
     last_reg = None
+    nav_level = 1.0
+    op_raw = B.P["open"]
     for t in range(max(t0, 1), t1):
         # 1. overnight
         g = float(w @ on[t])
@@ -119,6 +125,11 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
                 target = w * (expo / tot)
         if target is not None:
             d = target - w
+            if costs.capital > 0:
+                nav_cny = nav_level * costs.capital
+                lotv = costs.lot * np.nan_to_num(op_raw[t], nan=np.inf)
+                tiny = (target > 1e-12) & (np.abs(d) * nav_cny < lotv)    # full exits are always allowed
+                d = np.where(tiny, 0.0, d)
             buy = (d > 1e-12) & B.can_buy_open[t]
             sell = (d < -1e-12) & B.can_sell_open[t]
             dd = np.zeros(N)
@@ -132,7 +143,13 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
             w = np.maximum(w + dd, 0.0)
             sb, ss = dd[dd > 0].sum(), -dd[dd < 0].sum()
             stamp = costs.stamp_new if t >= stamp_day else costs.stamp_old
-            cost = sb * (costs.commission + costs.slippage) + ss * (costs.commission + costs.slippage + stamp)
+            if costs.capital > 0:
+                amt = np.abs(dd) * nav_cny
+                amt = amt[amt > 0]
+                comm = np.maximum(costs.min_fee, costs.commission * amt).sum() / nav_cny
+                cost = comm + sb * costs.slippage + ss * (costs.slippage + stamp)
+            else:
+                cost = sb * (costs.commission + costs.slippage) + ss * (costs.commission + costs.slippage + stamp)
             nav_mult *= (1.0 - cost)
             w = w * (1.0 - cost)  # costs paid out of the portfolio
         # 3. intraday
@@ -140,6 +157,7 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         w = w * (1.0 + idr[t]) / (1.0 + g2)
         nav_mult *= (1.0 + g2)
         rets.append(nav_mult - 1.0)
+        nav_level *= nav_mult
         tov_buy.append(sb)
         tov_sell.append(ss)
         n_pos.append(int((w > 1e-9).sum()))
