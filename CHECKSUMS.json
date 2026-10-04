@@ -1,7 +1,7 @@
 {
   "algorithm": "SHA-256",
-  "file_count": 19,
-  "total_size_bytes": 403144885,
+  "file_count": 41,
+  "total_size_bytes": 517933949,
   "files": [
     {
       "path": "data/stock_price_v1/stock_price_2019.parquet",
@@ -97,6 +97,116 @@
       "path": "data/research_data_v1_20261002/DATA_VALIDATION.json",
       "size_bytes": 14773,
       "sha256": "f42afa9d5acb2271096794c697b8bb7a5837131ff5d1f61c850e572f05d28a18"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/README.md",
+      "size_bytes": 8529,
+      "sha256": "046872bbce68e60b76164d0b90a515b817280d35405b9dc6d41ccd32f9a20bcd"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/etf_family_map.parquet",
+      "size_bytes": 546,
+      "sha256": "4642b685983678b27428ea07aecd2311bc3e66a4de9bf40d32c4802205209bc0"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/etf_family_share_daily.parquet",
+      "size_bytes": 231662,
+      "sha256": "1c0aa454e5270eb6dc4dad7ed30c451ae997983e1ebc5ff89d1dab0d24ba5f31"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/etf_share_daily.parquet",
+      "size_bytes": 649321,
+      "sha256": "e1975f449b76f3c043b2ca85409e0ab478bd5cec8191556a10e9791d4ed69f6e"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_basis_by_contract.parquet",
+      "size_bytes": 736861,
+      "sha256": "ce7c2ce51a1dcadab19cc2649bf00e8f82a915a5b1924b71bec2bba7f4f38c8a"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_basis_dominant_daily.parquet",
+      "size_bytes": 175402,
+      "sha256": "489e968c5494a3f8c9ca75731dca6922314b3b59f242ff43c0dd3229e2379a1d"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_basis_oi_top_daily.parquet",
+      "size_bytes": 176175,
+      "sha256": "2cfd4e17ad3f657ba2d89b22ee8dfea9a3efdd1eeb987551302465f216cfbe1f"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_continuous_daily.parquet",
+      "size_bytes": 365746,
+      "sha256": "16a72f0bb69d82083fa47e5d99dac4883b663ed7e1cd1921477df9402dc2ce15"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_contract_daily.parquet",
+      "size_bytes": 583079,
+      "sha256": "9e14350d4f2b3cec6606c66de49ec4ec157024c35cdd00a60f104de46b235cab"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_contracts.parquet",
+      "size_bytes": 1980,
+      "sha256": "dd13ba6d56e67e5567a7564568951e14c27585faadef238c50ebae0a4eaf55ed"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/futures_dominant_daily.parquet",
+      "size_bytes": 7109,
+      "sha256": "9ccfdb13abc25c27a28fb4e7d2caa54eb216179599ac5e25ce4178ee0d0eb74a"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/index_daily.parquet",
+      "size_bytes": 483199,
+      "sha256": "9359254d0f4bfd8c9f4c488818f70e182be772898b7e663154bbcc87e4b6e822"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2019.parquet",
+      "size_bytes": 6764925,
+      "sha256": "f875b7fb72fc52dc43e9cc1c2048f5a7583cd4cc212ad672bc2cdba29d2818e0"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2020.parquet",
+      "size_bytes": 10120683,
+      "sha256": "7fd94728eb2c0d706d55372648213b64aefae943d47368f62bd09aec6dc3db07"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2021.parquet",
+      "size_bytes": 11969801,
+      "sha256": "1d9d687f442b74bb74dc3f5a95531ca3878ecd32fe3cf8146f45f7b8680133bc"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2022.parquet",
+      "size_bytes": 14552815,
+      "sha256": "caff8c3c57a55b3f31cba910c3efbc1d5bc87c150bc841710c0341295628f023"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2023.parquet",
+      "size_bytes": 18342418,
+      "sha256": "b2c6674b1576de9781bac4132871c4bbbc5230556c8adac5b1b2143359cba452"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2024.parquet",
+      "size_bytes": 18078222,
+      "sha256": "80f332147cb020eda9cea287d940c4224e49b893438bf91bc5062d72f457d9cf"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2025.parquet",
+      "size_bytes": 17496095,
+      "sha256": "5f4b91af866e1c017a38a0d12063c39c7f5750ae3dfc46533c2a0941ee06ad50"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_stock_daily_2026.parquet",
+      "size_bytes": 13865832,
+      "sha256": "684688e09dc6361ae22be18be3acfc4e9fb7c8ecb44ef39d6e3a330b0a5dd251"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_total_combined_daily.parquet",
+      "size_bytes": 65492,
+      "sha256": "ac23b587034b553a44813cd210597a0e90be8c5c5f3c7a5abde0a32b1c34db3e"
+    },
+    {
+      "path": "data/smallcap_risk_v1_20261004/margin_total_daily.parquet",
+      "size_bytes": 113172,
+      "sha256": "a574807a1fc28ab1938a221e9ad32099c8904969565e0b77cbc12df1be426c2c"
     }
   ]
 }
