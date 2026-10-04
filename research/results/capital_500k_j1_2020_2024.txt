@@ -1,0 +1,13 @@
+  n=50 整体每天降5% (比例成本参考)        ann mean +32.7% (range +29.4%..+34.6%) worst mdd -20.2% sharpe 1.65 | position ~10k CNY | 2020:+29% 2021:+40% 2022:+30% 2023:+19% 2024:+31%
+  n=50 整体每天降5%                 ann mean +31.5% (range +28.1%..+33.5%) worst mdd -20.2% sharpe 1.61 | position ~10k CNY | 2020:+28% 2021:+39% 2022:+28% 2023:+18% 2024:+30%
+  n=50 每天整只卖2只                 ann mean +32.5% (range +28.9%..+34.3%) worst mdd -19.9% sharpe 1.65 | position ~10k CNY | 2020:+28% 2021:+40% 2022:+28% 2023:+20% 2024:+32%
+  n=30 整体每天降5%                 ann mean +31.4% (range +28.2%..+33.4%) worst mdd -19.7% sharpe 1.58 | position ~16k CNY | 2020:+23% 2021:+39% 2022:+28% 2023:+24% 2024:+30%
+  n=30 每天整只卖                   ann mean +31.9% (range +28.6%..+33.3%) worst mdd -19.7% sharpe 1.59 | position ~17k CNY | 2020:+23% 2021:+39% 2022:+30% 2023:+24% 2024:+29%
+  n=20 每天整只卖1只                 ann mean +31.7% (range +27.6%..+34.7%) worst mdd -20.9% sharpe 1.55 | position ~25k CNY | 2020:+21% 2021:+42% 2022:+28% 2023:+26% 2024:+27%
+
+[exited with code 0]
+
+board-lot check with growing NAV (names mode, offset 0):
+n=50: position ~12k CNY in year 1; one lot = 5% of a position (median), 11% (p90); holdings price median 7.8 CNY
+n=30: position ~20k CNY; one lot = 3% (median), 7% (p90)
+n=20: position ~30k CNY; one lot = 2% (median), 4% (p90)
