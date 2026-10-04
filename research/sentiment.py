@@ -40,7 +40,11 @@ def build(start_year=2019):
             if len(a) > 40 and a.std() > 0:
                 out[t] = (x[t] - a.mean()) / a.std()
         return out
-    comp = np.nanmean(np.stack([tz(df["n_limit_up"]), -tz(df["n_limit_down"]), -tz(df["broke_rate"]),
-                                tz(df["max_streak"]), tz(df["lu_premium"]), tz(df["pct_up"]), tz(np.log(df["turnover_bn"]))]), axis=0)
-    df = df.with_columns(pl.Series("sentiment", comp).rolling_mean(5).alias("sentiment_5d"))
+    comps = {"z_up": tz(df["n_limit_up"]), "z_dn": -tz(df["n_limit_down"]), "z_brk": -tz(df["broke_rate"]),
+             "z_stk": tz(df["max_streak"]), "z_prem": tz(df["lu_premium"]), "z_pu": tz(df["pct_up"]),
+             "z_to": tz(np.log(df["turnover_bn"]))}
+    comp = np.nanmean(np.stack(list(comps.values())), axis=0)
+    df = df.with_columns(pl.Series("sentiment", comp)).with_columns(pl.col("sentiment").rolling_mean(5).alias("sentiment_5d"))
+    # 5-day means of each signed component (higher = hotter); their average equals sentiment_5d
+    df = df.with_columns([pl.Series(k, v).rolling_mean(5).alias(k) for k, v in comps.items()])
     return df.filter(pl.col("date").dt.year() >= start_year)
