@@ -10,6 +10,11 @@ Version A settings (top 100, rebalance 20d, keep until rank > 300); overlays who
   V3 drop worst 30%, rank by (small + comp + vm) / 3
   V4 drop worst 50% by comp, rank by small
   V5 drop worst 30%, rank by 0.5 small + 0.5 ml
+  V6 drop worst 30%, rank by 0.5 small + 0.5 oversold (low RSI14)          (user request: RSI)
+  V7 current V0, additionally excluding overbought names (RSI14 > 70)       (user request: RSI)
+  RSI(n) = 100 * mean(gains) / (mean(gains) + mean(losses)) over n days of qfq returns.
+  Also reported: Rank IC of RSI6 / RSI14 (train 2019-2021, valid 2022-2023) and their correlation
+  with the existing ret5 / ret20 reversal factors.
   overlays: C0 none | C2 crowding
 """
 import numpy as np, polars as pl
@@ -29,12 +34,38 @@ pred = np.load("/tmp/feed_cache/ml_pred_2020_2024.npy")
 assert pred.shape == U.shape
 ml = zrank(pred, U)
 k30, k50 = comp_r > -0.4, comp_r > 0.0
+
+
+def rsi(n):
+    g = lib.rmean(np.maximum(B.r, 0.0), n, int(0.7 * n))
+    l = lib.rmean(np.maximum(-B.r, 0.0), n, int(0.7 * n))
+    with np.errstate(invalid="ignore", divide="ignore"):
+        x = 100.0 * g / (g + l)
+    x[~np.isfinite(x)] = np.nan
+    return x
+
+
+RSI = {6: rsi(6), 14: rsi(14)}
+d = B.dates
+tr = (d >= np.datetime64("2019-04-01")) & (d < np.datetime64("2021-12-01"))
+va = (d >= np.datetime64("2022-01-01")) & (d <= np.datetime64("2023-12-29"))
+fr = {h: lib.rank_rows(np.where(U, B.fwd[h], np.nan)) for h in (5, 20)}
+print("RSI single-factor check (main-board universe; negative IC = low RSI does better):")
+for n, x in RSI.items():
+    rk = lib.rank_rows(np.where(U, x, np.nan))
+    cors = {k: float(np.nanmean(lib.row_corr(rk, lib.rank_rows(np.where(U, F[k], np.nan)))[0])) for k in ("ret5", "ret20")}
+    for h in (5, 20):
+        ic = lib.row_corr(rk, fr[h])[0]
+        print(f"   RSI{n:<2d} h={h:<2d} IC train {np.nanmean(ic[tr]):+.3f} (t {lib.nw_t(ic[tr], h):+.1f})  valid {np.nanmean(ic[va]):+.3f} (t {lib.nw_t(ic[va], h):+.1f})"
+              f"   | corr with ret5 {cors['ret5']:+.2f}, ret20 {cors['ret20']:+.2f}", flush=True)
 SC = {"V0 现行: 剔30%+小盘": np.where(k30, small, np.nan),
       "V1 剔30%+小盘/综合": np.where(k30, 0.5 * small + 0.5 * comp_r, np.nan),
       "V2 剔30%+小盘/VWAP+MAX": np.where(k30, 0.5 * small + 0.5 * vm, np.nan),
       "V3 剔30%+三者等权": np.where(k30, (small + comp_r + vm) / 3, np.nan),
       "V4 剔50%+小盘": np.where(k50, small, np.nan),
-      "V5 剔30%+小盘/LightGBM": np.where(k30, 0.5 * small + 0.5 * ml, np.nan)}
+      "V5 剔30%+小盘/LightGBM": np.where(k30, 0.5 * small + 0.5 * ml, np.nan),
+      "V6 剔30%+小盘/RSI超卖": np.where(k30, 0.5 * small + 0.5 * zrank(-RSI[14], U), np.nan),
+      "V7 现行+剔除RSI>70": np.where(k30 & ~(RSI[14] > 70), small, np.nan)}
 st = rr.states(B, U)
 OV = {"C0": None, "C2": rr.ramp(np.where(st["crowded"], 0.5, 1.0), 0.05, every=1)}
 A, Z = "2020-04-01", "2024-12-31"
