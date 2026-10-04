@@ -1,0 +1,32 @@
+BASE V9: ann +32.0% mdd -20.0% sharpe 1.60  (expect +32.0%)
+  junk cut     0.2: ann +31.4% mdd -21.1% sharpe 1.58
+  junk cut     0.3: ann +32.0% mdd -20.0% sharpe 1.60
+  junk cut     0.4: ann +31.1% mdd -20.2% sharpe 1.58
+  dy weight    0.3: ann +32.8% mdd -19.9% sharpe 1.59
+  dy weight    0.5: ann +32.0% mdd -20.0% sharpe 1.60
+  dy weight    0.7: ann +25.8% mdd -21.9% sharpe 1.38
+  holdings      40: ann +32.0% mdd -21.0% sharpe 1.59
+  holdings      50: ann +32.0% mdd -20.0% sharpe 1.60
+  holdings      60: ann +30.6% mdd -20.1% sharpe 1.55
+  rebalance     10: ann +29.3% mdd -19.5% sharpe 1.50
+  rebalance     20: ann +32.0% mdd -20.0% sharpe 1.60
+  rebalance     30: ann +28.8% mdd -21.3% sharpe 1.50
+  ADV floor     5M: ann +32.3% mdd -17.7% sharpe 1.63
+  ADV floor    10M: ann +32.0% mdd -20.0% sharpe 1.60
+  ADV floor    20M: ann +23.8% mdd -22.7% sharpe 1.29
+  offset  0d: ann +32.0% mdd -20.0% sharpe 1.60
+  offset  5d: ann +28.5% mdd -20.1% sharpe 1.47
+  offset 10d: ann +27.1% mdd -19.6% sharpe 1.41
+  offset 15d: ann +28.9% mdd -20.9% sharpe 1.48
+
+V9 book, SW L1 industry weights (average / max over time):
+   纺织服装: 15%/27%  化工: 9%/27%  交通运输: 8%/24%  机械设备: 8%/19%  房地产: 6%/25%  轻工制造: 6%/20%  公用事业: 6%/16%  商业贸易: 6%/12%
+   largest single-industry weight on any day: 27%;  days with any industry > 25%: 4%
+
+[exited with code 0]
+
+=== staggered rebalancing (4 sleeves offset 0/5/10/15 trading days)
+V9  10bp: single sleeves +32.0% +28.5% +27.1% +28.9% | 4-sleeve ann +29.1% mdd -20.1% sharpe 1.50 | 2020:+27% 2021:+35% 2022:+28% 2023:+22% 2024:+21%
+V9  20bp: single sleeves +30.7% +27.2% +25.9% +27.7% | 4-sleeve ann +27.9% mdd -20.4% sharpe 1.45
+J1  10bp: single sleeves +33.6% +31.6% +29.6% +30.8% | 4-sleeve ann +31.4% mdd -20.2% sharpe 1.60 | 2020:+27% 2021:+41% 2022:+28% 2023:+18% 2024:+28%
+J1  20bp: single sleeves +32.2% +30.2% +28.2% +29.4% | 4-sleeve ann +30.0% mdd -20.4% sharpe 1.55
