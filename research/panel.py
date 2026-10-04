@@ -9,7 +9,8 @@ import polars as pl
 
 DATA = os.path.join(os.path.dirname(__file__), "..", "data")
 CACHE = os.environ.get("FEED_CACHE", "/tmp/feed_cache")
-LAST_ALLOWED_YEAR = 2024
+# research runs stop at 2024; only the pre-registered final test sets FEED_LAST_YEAR=2026
+LAST_ALLOWED_YEAR = int(os.environ.get("FEED_LAST_YEAR", "2024"))
 
 FIELDS = ["open", "high", "low", "close", "pre_close", "high_limit", "low_limit",
           "volume", "money", "qfq_open", "qfq_high", "qfq_low", "qfq_close",
