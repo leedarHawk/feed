@@ -108,7 +108,7 @@ fn main() {
                 })
                 .collect();
             let corr: Vec<Vec<f64>> =
-                hof.iter().map(|x| hof.iter().map(|y| sig_corr(&x.sig, &y.sig, ctx.sig_days)).collect()).collect();
+                hof.iter().map(|x| hof.iter().map(|y| sig_corr(&x.sig, &y.sig)).collect()).collect();
             let out = json!({"seed": p.seed, "pop": p.pop, "gens": p.gens, "terminals": d.term_names,
                              "members": members, "corr": corr});
             std::fs::write(a.get("out").expect("--out"), serde_json::to_string(&out).unwrap()).unwrap();
@@ -137,8 +137,7 @@ fn main() {
                 res.push(json!({"expr": node.fmt(&d.term_names), "nodes": node.size(), "splits": split_ics(&f, &d, node.size())}));
                 eprintln!("  [{}/{}] {}", k + 1, formulas.len(), s);
             }
-            let days = sig_ctx.as_ref().map(|c| c.sig_days).unwrap_or(1);
-            let corr: Vec<Vec<f64>> = sigs.iter().map(|x| sigs.iter().map(|y| sig_corr(x, y, days)).collect()).collect();
+            let corr: Vec<Vec<f64>> = sigs.iter().map(|x| sigs.iter().map(|y| sig_corr(x, y)).collect()).collect();
             std::fs::write(a.get("out").expect("--out"), serde_json::to_string(&json!({"factors": res, "train_corr": corr})).unwrap()).unwrap();
         }
         _ => panic!("mode must be mine | eval | bench"),

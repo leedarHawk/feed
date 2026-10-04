@@ -39,7 +39,7 @@ rows = []
 for j, f in enumerate(R["factors"]):
     st = {}
     for sp in ("train", "valid", "test"):
-        ic = np.array([np.nan if v is None else v for v in f["splits"][sp]["ic"]])
+        ic = np.array([0.0 if v is None else v for v in f["splits"][sp]["ic"]])
         st[sp] = (np.nanmean(ic), lib.nw_t(ic, G["nw_lag"]))
     rows.append(dict(factor=formulas[j], sign=signs[j], ic_train=st["train"][0], t_train=st["train"][1],
                      ic_2024=st["valid"][0], t_2024=st["valid"][1], ic_test=st["test"][0], t_test=st["test"][1]))

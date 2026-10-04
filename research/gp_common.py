@@ -61,11 +61,23 @@ def load_factor(S, data_dir, path):
     return out
 
 
+def zrank_avg(x, U):
+    """Like backtest.zrank but ties share their average rank (backtest.zrank breaks ties by column
+    position, which for sparse factors encodes stock-code order)."""
+    out = np.full(x.shape, np.nan, dtype=np.float32)
+    for t in range(x.shape[0]):
+        m = U[t] & np.isfinite(x[t])
+        n = int(m.sum())
+        if n >= 2:
+            out[t, m] = 2.0 * (rankdata(x[t, m]) - 1) / (n - 1) - 1.0
+    return out
+
+
 def composite(S, facs, signs):
-    z = np.stack([s * bt.zrank(f, S.U) for f, s in zip(facs, signs)])
+    z = np.stack([s * zrank_avg(f, S.U) for f, s in zip(facs, signs)])
     with np.errstate(invalid="ignore"):
         g = np.nanmean(z, axis=0)
-    return bt.zrank(g, S.U)
+    return zrank_avg(g, S.U)
 
 
 def overlay(S, gp, lam):
@@ -88,7 +100,8 @@ def run_bt(S, score, start, end, costs, periods):
 
 
 def py_ic(S, f, t_list, H=20):
-    """Same IC as gpminer: inside M, missing factor -> middle rank, OLS removal of the small rank."""
+    """Same IC as gpminer: inside M, missing factor -> middle rank, OLS removal of the small rank.
+    A day on which the factor does not vary inside M gets IC 0 (it ranks nothing)."""
     fwd, out = S.B.fwd[H], []
     for t in t_list:
         idx = S.M[t] & np.isfinite(fwd[t]) & np.isfinite(S.small[t])
@@ -100,10 +113,10 @@ def py_ic(S, f, t_list, H=20):
         sr = (rankdata(S.small[t, idx]) - 1) / (m - 1); sr -= sr.mean()
         v = f[t, idx].astype(np.float64); rf = np.full(m, 0.5); fin = np.isfinite(v)
         if fin.sum() < 2:
-            out.append(np.nan)
+            out.append(0.0)
             continue
         rf[fin] = (rankdata(v[fin]) - 1) / (fin.sum() - 1); rf -= rf.mean()
         e = rf - (rf @ sr) / (sr @ sr) * sr
         ss = e @ e
-        out.append(np.nan if ss < 1e-10 else float(e @ fr / np.sqrt(ss * (fr @ fr))))
+        out.append(0.0 if ss < 1e-10 else float(e @ fr / np.sqrt(ss * (fr @ fr))))
     return np.array(out)

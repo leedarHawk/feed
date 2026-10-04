@@ -34,8 +34,8 @@ fn qualifies(s: &Score, p: &Params) -> bool {
 
 /// Insert into the hall of fame. A candidate correlated >= dup_corr with a member replaces it only if
 /// it scores higher; otherwise it is appended (or replaces the weakest member when full).
-fn hof_insert(hof: &mut Vec<Member>, m: Member, p: &Params, days: usize) -> bool {
-    let corrs: Vec<f64> = hof.par_iter().map(|h| sig_corr(&h.sig, &m.sig, days).abs()).collect();
+fn hof_insert(hof: &mut Vec<Member>, m: Member, p: &Params) -> bool {
+    let corrs: Vec<f64> = hof.par_iter().map(|h| sig_corr(&h.sig, &m.sig).abs()).collect();
     if let Some((j, &c)) = corrs.iter().enumerate().max_by(|a, b| a.1.partial_cmp(b.1).unwrap()) {
         if c >= p.dup_corr {
             if m.score.fitness > hof[j].score.fitness {
@@ -197,12 +197,12 @@ pub fn run(d: &Data, ctx: &Ctx, p: &Params) -> Vec<Member> {
                 // crowding: discount candidates that duplicate a stronger member
                 let crowded = hof
                     .par_iter()
-                    .any(|h| h.score.fitness >= s.fitness && sig_corr(&h.sig, &sig, ctx.sig_days).abs() >= p.crowd_corr);
+                    .any(|h| h.score.fitness >= s.fitness && sig_corr(&h.sig, &sig).abs() >= p.crowd_corr);
                 if crowded {
                     sel *= 0.5;
                 }
                 let m = Member { node: pop[k].clone(), expr: exprs[k].clone(), score: s, sig };
-                hof_insert(&mut hof, m, p, ctx.sig_days);
+                hof_insert(&mut hof, m, p);
             }
             cache.insert(exprs[k].clone(), sel);
         }

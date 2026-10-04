@@ -53,6 +53,21 @@ Final test (one shot, FEED_LAST_YEAR=2026; run_gp_final.py)
   pass (both required): composite test IC has the train sign with NW t >= 1.5; AND V0+GP beats V0 on
     2025-01..2026-09 annualised return (schedule mean, 10bp) with worst max drawdown at most 3 points
     deeper. Results are reported in full either way.
+
+AMENDMENT 1 (2026-10-04, after the first mining run; no 2025-2026 data had been read)
+  The first run (results/gp_run1_pool.csv, gp_run1_selected.json) is void because of three bugs:
+  1. factor-to-factor correlation was divided by the number of signature days instead of the two
+     factors' norms; a factor's correlation with itself came out ~0.1, near-duplicates passed every
+     correlation rule, and the whole hall of fame / pool (800 of 800) became variants of `uplim`.
+     Fix: proper correlation of the per-day unit-norm residuals (self-correlation 1).
+  2. days on which a factor does not vary inside M (sparse factors such as uplim are flat on ~85% of
+     days) were dropped from the IC statistics, inflating ICIR and t. Fix: such days count as IC 0
+     in the fitness, in selection and in the final test.
+  3. the composite used backtest.zrank, which breaks ties by column position; for sparse factors the
+     composite was -0.998 correlated with stock-code order, and that alone produced the in-sample
+     lift (lam 0.5: +36.7% vs V0 +32.0%; with average-rank ties +27.3%). Fix: average-rank ties.
+  Everything else (seeds, budget, rules, lambda grid, test and pass criteria) is unchanged; the run
+  is repeated from scratch.
 """
 SEEDS = (1, 2, 3, 4)
 GP_ARGS = dict(pop=400, gens=30, hof=200, **{"hof-min": 0.15, "max-depth": 6, "max-nodes": 20, "dup-corr": 0.7})

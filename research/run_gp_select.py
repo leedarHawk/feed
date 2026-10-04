@@ -23,8 +23,8 @@ yrs = meta["years"]
 rows = []
 for k, f in enumerate(R["factors"]):
     tr, va = f["splits"]["train"], f["splits"]["valid"]
-    ic = np.array([np.nan if v is None else v for v in tr["ic"]]); t_idx = np.array(tr["t"])
-    icv = np.array([np.nan if v is None else v for v in va["ic"]])
+    ic = np.array([0.0 if v is None else v for v in tr["ic"]]); t_idx = np.array(tr["t"])
+    icv = np.array([0.0 if v is None else v for v in va["ic"]])
     mu = np.nanmean(ic); sign = float(np.sign(mu))
     ym = [np.nanmean(ic[(t_idx >= yrs[str(y)][0]) & (t_idx <= yrs[str(y)][1])]) for y in (2020, 2021, 2022, 2023)]
     rows.append(dict(k=k, expr=f["expr"], nodes=f["nodes"], sign=sign, ic_train=mu, icir_train=mu / np.nanstd(ic),

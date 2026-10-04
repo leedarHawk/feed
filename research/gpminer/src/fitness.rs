@@ -166,7 +166,8 @@ pub fn score(f: &[f32], d: &Data, ctx: &Ctx, nodes: usize, want_sig: bool) -> (S
         fin += nf;
     }
     let cover = fin as f64 / tot.max(1) as f64;
-    let good: Vec<(usize, f64)> = ics.iter().enumerate().filter(|(_, v)| v.is_finite()).map(|(k, &v)| (k, v as f64)).collect();
+    // a day on which the factor does not vary inside M ranks nothing: it counts as IC 0
+    let good: Vec<(usize, f64)> = ics.iter().enumerate().map(|(k, &v)| (k, if v.is_finite() { v as f64 } else { 0.0 })).collect();
     let mut sc = Score { cover, nodes, nyears: ctx.nyears, ..Default::default() };
     if good.len() < 100 || cover < 0.9 {
         return (sc, ics, sig);
@@ -200,11 +201,20 @@ pub fn score(f: &[f32], d: &Data, ctx: &Ctx, nodes: usize, want_sig: bool) -> (S
     (sc, ics, sig)
 }
 
-/// Mean per-day correlation of two factors' size-neutral ranks (signatures are unit-norm per day).
-pub fn sig_corr(a: &[f32], b: &[f32], days: usize) -> f64 {
-    let mut s = 0f64;
+/// Correlation of two factors' size-neutral ranks over the signature days. Each day's residual is
+/// unit-norm (zero on days the factor has no variation), so this weights active days equally and a
+/// factor's correlation with itself is 1.
+pub fn sig_corr(a: &[f32], b: &[f32]) -> f64 {
+    let (mut ab, mut aa, mut bb) = (0f64, 0f64, 0f64);
     for (x, y) in a.iter().zip(b) {
-        s += (*x as f64) * (*y as f64);
+        let (x, y) = (*x as f64, *y as f64);
+        ab += x * y;
+        aa += x * x;
+        bb += y * y;
     }
-    s / days.max(1) as f64
+    if aa > 0.0 && bb > 0.0 {
+        ab / (aa * bb).sqrt()
+    } else {
+        0.0
+    }
 }
