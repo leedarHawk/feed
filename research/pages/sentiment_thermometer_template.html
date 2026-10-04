@@ -1,0 +1,526 @@
+<title>A股情绪温度计</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap">
+<style>
+/* Layout: trading-desk readout. One column: state reading + indicator tiles, then three time panels that share one x-range, then evidence and a reading guide. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #fdfdfe;
+  --ink: #0f1720;
+  --ink-2: #4a5462;
+  --muted: #7a8493;
+  --grid: #e4e8ee;
+  --axis: #c3cad4;
+  --ring: rgba(15, 23, 32, 0.09);
+  --accent: #2a78d6;
+  --up: #e34948;
+  --down: #008300;
+  --ice: #2a78d6;
+  --cool: #86b6ef;
+  --neutral: #c9ced6;
+  --warm: #f2a37f;
+  --hot: #eb6834;
+  --ice-wash: rgba(42, 120, 214, 0.10);
+  --hot-wash: rgba(235, 104, 52, 0.12);
+  --font-display: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --font-num: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1015; --surface: #151920; --ink: #eef1f5; --ink-2: #c0c7d1; --muted: #8b94a1;
+    --grid: #252b34; --axis: #3a424e; --ring: rgba(255, 255, 255, 0.09);
+    --accent: #3987e5; --up: #e66767; --down: #0ca30c;
+    --ice: #3987e5; --cool: #2f5f99; --neutral: #3d444f; --warm: #a8573a; --hot: #d95926;
+    --ice-wash: rgba(57, 135, 229, 0.14); --hot-wash: rgba(217, 89, 38, 0.16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1015; --surface: #151920; --ink: #eef1f5; --ink-2: #c0c7d1; --muted: #8b94a1;
+  --grid: #252b34; --axis: #3a424e; --ring: rgba(255, 255, 255, 0.09);
+  --accent: #3987e5; --up: #e66767; --down: #0ca30c;
+  --ice: #3987e5; --cool: #2f5f99; --neutral: #3d444f; --warm: #a8573a; --hot: #d95926;
+  --ice-wash: rgba(57, 135, 229, 0.14); --hot-wash: rgba(217, 89, 38, 0.16);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.55; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; display: grid; gap: 22px; }
+@media (max-width: 480px) { .wrap { padding-inline: 16px; } }
+header.top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: 30px; letter-spacing: 0.02em; margin: 0; text-wrap: balance; }
+.meta { color: var(--muted); font-size: 13px; }
+h2 { font-size: 15px; font-weight: 600; margin: 0; letter-spacing: 0.02em; }
+.sub { color: var(--muted); font-size: 12.5px; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 18px 20px; min-width: 0; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 18px 32px; align-items: center; }
+@media (max-width: 760px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+.hero .label { color: var(--ink-2); font-size: 13px; }
+.hero .value { font-size: 56px; font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; margin-top: 4px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 3px 10px 3px 8px; border-radius: 999px; background: var(--grid); color: var(--ink); margin-top: 10px; }
+.pill i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.hero .rank { color: var(--ink-2); margin-top: 8px; font-size: 13px; }
+.gauge svg { width: 100%; height: auto; display: block; }
+.gauge .read { color: var(--ink-2); font-size: 13px; margin-top: 10px; max-width: 62ch; }
+
+/* tiles */
+.tiles { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1060px) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tiles .tile:last-child { grid-column: span 2; } }
+.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px 10px; display: grid; gap: 2px; min-width: 0; }
+.tile .k { color: var(--ink-2); font-size: 12.5px; }
+.tile .v { font-size: 24px; font-weight: 600; line-height: 1.2; }
+.tile .d { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.tile svg { width: 100%; height: 30px; display: block; margin-top: 4px; }
+
+/* filter row */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filters .lab { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
+.seg { display: inline-flex; border: 1px solid var(--axis); border-radius: 8px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13px; color: var(--ink-2); background: transparent; border: 0; padding: 5px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--axis); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); font-weight: 600; }
+.seg button:focus-visible, .chart:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* charts */
+.panel { display: grid; gap: 4px; }
+.panel .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--ink-2); font-size: 12.5px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.key-line { width: 16px; height: 2px; border-radius: 2px; display: inline-block; }
+.key-box { width: 12px; height: 10px; border-radius: 2px; display: inline-block; }
+.chart { position: relative; width: 100%; touch-action: pan-y; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.chart .tick { fill: var(--muted); font-size: 11px; font-family: var(--font-body); font-variant-numeric: tabular-nums; }
+.chart .grid { stroke: var(--grid); stroke-width: 1; }
+.chart .base { stroke: var(--axis); stroke-width: 1; }
+.chart .xhair { stroke: var(--ink-2); stroke-width: 1; opacity: 0.55; }
+.tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); border: 1px solid var(--ring); border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); padding: 8px 10px; font-size: 12.5px; min-width: 168px; }
+.tip .t { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+.tip .r { display: grid; grid-template-columns: 16px 1fr auto; align-items: center; gap: 2px 8px; }
+.tip .r b { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.tip .r span:nth-child(2) { color: var(--ink-2); }
+
+/* evidence */
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .two { grid-template-columns: minmax(0, 1fr); } }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; }
+.bar-cell { width: 42%; }
+.mini { position: relative; height: 10px; }
+.mini .z { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.mini .b { position: absolute; top: 0; height: 10px; border-radius: 2px; background: var(--accent); }
+.mini .b.neg { background: var(--muted); }
+.scroll { overflow-x: auto; }
+.note { color: var(--ink-2); font-size: 13px; max-width: 72ch; }
+.note p { margin: 6px 0; }
+.guide { min-width: 600px; }
+.guide td:nth-child(n+2), .guide th:nth-child(n+2) { text-align: left; white-space: normal; }
+ul.use { margin: 6px 0 0; padding-left: 18px; color: var(--ink-2); display: grid; gap: 6px; max-width: 72ch; }
+details summary { cursor: pointer; color: var(--ink-2); font-size: 13.5px; }
+details[open] summary { margin-bottom: 8px; }
+footer { color: var(--muted); font-size: 12px; max-width: 80ch; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>A股情绪温度计</h1>
+    <div class="meta" id="asof"></div>
+  </header>
+
+  <section class="card hero" aria-label="当前情绪">
+    <div>
+      <div class="label">情绪综合分（5 日均值）</div>
+      <div class="value" id="heroValue"></div>
+      <div class="pill" id="heroPill"><i></i><span></span></div>
+      <div class="rank" id="heroRank"></div>
+    </div>
+    <div class="gauge">
+      <svg id="gauge" height="72" role="img" aria-label="情绪分在历史分档中的位置"></svg>
+      <div class="read" id="heroRead"></div>
+    </div>
+  </section>
+
+  <section class="tiles" id="tiles" aria-label="最新一日指标"></section>
+
+  <div class="filters" role="group" aria-label="时间范围">
+    <span class="lab">时间范围</span>
+    <div class="seg" id="range">
+      <button type="button" data-n="126" aria-pressed="false">6 个月</button>
+      <button type="button" data-n="250" aria-pressed="true">1 年</button>
+      <button type="button" data-n="750" aria-pressed="false">3 年</button>
+      <button type="button" data-n="0" aria-pressed="false">全部（2019 起）</button>
+    </div>
+  </div>
+
+  <section class="card panel">
+    <div class="head">
+      <h2>情绪综合分</h2>
+      <div class="legend">
+        <span><i class="key-line" style="background:var(--accent)"></i>情绪分（5 日均）</span>
+        <span><i class="key-box" style="background:var(--ice-wash);outline:1px solid var(--ice)"></i>冰点区（历史最低 10%）</span>
+        <span><i class="key-box" style="background:var(--hot-wash);outline:1px solid var(--hot)"></i>过热区（历史最高 10%）</span>
+      </div>
+    </div>
+    <div class="chart" id="cSent" tabindex="0" aria-label="情绪分走势图，左右方向键移动读数"></div>
+  </section>
+
+  <section class="card panel">
+    <div class="head"><h2>国证 2000 指数</h2><span class="sub">小盘股走势，作为情绪的对照</span></div>
+    <div class="chart" id="cIdx" tabindex="0" aria-label="国证2000指数走势图"></div>
+  </section>
+
+  <section class="card panel">
+    <div class="head">
+      <h2>涨停与跌停家数</h2>
+      <div class="legend">
+        <span><i class="key-box" style="background:var(--up)"></i>涨停（零轴上方）</span>
+        <span><i class="key-box" style="background:var(--down)"></i>跌停（零轴下方）</span>
+        <span class="sub" id="aggNote"></span>
+      </div>
+    </div>
+    <div class="chart" id="cLim" tabindex="0" aria-label="涨停跌停家数图"></div>
+  </section>
+
+  <section class="card">
+    <div class="head" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;align-items:baseline">
+      <h2>情绪能不能用来择时</h2>
+      <span class="sub">按情绪分五等分，统计之后 20 个交易日国证 2000 的平均涨跌</span>
+    </div>
+    <div class="two" id="evidence" style="margin-top:12px"></div>
+    <div class="note" style="margin-top:10px">
+      <p>2025–2026 年，情绪越冷，之后 20 天越容易涨，逆向操作有效。2019–2024 年没有这个规律，冰点之后上涨的概率只有 42%。这个关系会随市场环境变化，不适合直接当作买卖规则。</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>怎么读这些指标</h2>
+    <div class="scroll" style="margin-top:8px">
+      <table class="guide">
+        <thead><tr><th>指标</th><th>冰点的样子</th><th>过热的样子</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>涨停家数</td><td>40 家以下</td><td>150 家以上</td><td>收盘封在涨停价的股票数</td></tr>
+          <tr><td>跌停家数</td><td>50 家以上</td><td>10 家左右</td><td>收盘封在跌停价的股票数</td></tr>
+          <tr><td>炸板率</td><td>40% 以上</td><td>20%–25%</td><td>盘中触及涨停但没封住的比例，越高说明追高资金越接不住</td></tr>
+          <tr><td>最高连板</td><td>3–4 板</td><td>10 板以上</td><td>投机情绪的高度</td></tr>
+          <tr><td>昨日涨停今日</td><td>为负</td><td>3% 以上</td><td>昨天涨停的股票今天平均涨跌，打板赚不赚钱</td></tr>
+          <tr><td>上涨家数占比</td><td>30% 以下</td><td>70% 以上</td><td>赚钱效应</td></tr>
+          <tr><td>成交额</td><td>持续萎缩</td><td>急剧放大</td><td>资金热度</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="use">
+      <li>个股层面：近期涨停、换手高、涨幅大的过热股票，之后大概率跑输。这一条在 2020–2024 年每年都成立，是最可靠的用法。</li>
+      <li>冰点时不要因为恐慌而减仓；过热时（综合分进入过热区、涨停 150 家以上、连板 10 板以上）不要追加仓位。</li>
+      <li>全市场情绪只作为风险提示，配合小盘拥挤度和成交额一起看，不单独作为加减仓依据。</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <details id="monthly">
+      <summary>月度明细（2019 年至今，按月平均；最高连板取当月最大值）</summary>
+      <div class="scroll"><table id="mtab"></table></div>
+    </details>
+  </section>
+
+  <footer>
+    数据来自聚宽 A 股日线，涨跌停按当日涨跌停价判断，剔除新股上市初期和退市整理期等无涨跌幅限制的交易日。情绪综合分由涨停家数、跌停家数、炸板率、最高连板、昨日涨停今日表现、上涨家数占比、成交额 7 项组成：每项与自身过去 250 个交易日比较换算成标准分，取平均后再做 5 日平滑。页面是静态快照，不会自动更新。仅供研究参考。
+  </footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script type="application/json" id="payload">__DATA__</script>
+<script>
+(function () {
+  "use strict";
+  const P = JSON.parse(document.getElementById("payload").textContent);
+  const R = P.rows, N = R.d.length, last = N - 1;
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = {
+    s: v => v == null ? "–" : (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2),
+    pct0: v => v == null ? "–" : Math.round(v * 100) + "%",
+    pp: v => v == null ? "–" : (v >= 0 ? "+" : "−") + Math.abs(v * 100).toFixed(2) + "%",
+    to: v => v == null ? "–" : (v >= 10000 ? (v / 10000).toFixed(2) + " 万亿" : Math.round(v).toLocaleString("zh-CN") + " 亿"),
+    int: v => v == null ? "–" : Math.round(v).toLocaleString("zh-CN"),
+    idx: v => v == null ? "–" : v.toLocaleString("zh-CN", { maximumFractionDigits: 0 }),
+  };
+  const STATES = [
+    { k: "冰点", c: "var(--ice)" }, { k: "偏冷", c: "var(--cool)" }, { k: "中性", c: "var(--neutral)" },
+    { k: "偏热", c: "var(--warm)" }, { k: "过热", c: "var(--hot)" }];
+  const state = v => v == null ? null : v < P.pct.p10 ? STATES[0] : v < P.pct.p30 ? STATES[1] : v < P.pct.p70 ? STATES[2] : v < P.pct.p90 ? STATES[3] : STATES[4];
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+  /* ---------- header + hero ---------- */
+  document.getElementById("asof").textContent = "数据截至 " + P.asof + " · 共 " + N.toLocaleString("zh-CN") + " 个交易日";
+  const s5 = R.s5[last], st = state(s5);
+  document.getElementById("heroValue").textContent = fmt.s(s5);
+  const pill = document.getElementById("heroPill");
+  pill.querySelector("i").style.background = st.c; pill.querySelector("span").textContent = st.k;
+  document.getElementById("heroRank").textContent = "低于 2019 年以来 " + ((1 - P.rank) * 100).toFixed(1) + "% 的交易日";
+  const reads = {
+    "冰点": "情绪处在历史最低的 10% 区间。2025–2026 年这类位置之后 20 天多数上涨，2019–2024 年则可能继续低迷。不要因为恐慌而减仓，也不要单凭这一条加仓。",
+    "偏冷": "情绪偏冷，赚钱效应较弱，注意跌停家数和炸板率是否继续上升。",
+    "中性": "情绪处在常态区间，没有明显的方向提示。",
+    "偏热": "情绪偏热，留意连板高度、炸板率和小盘拥挤度的变化。",
+    "过热": "情绪处在历史最高的 10% 区间，不宜追加仓位，注意成交额和连板高度是否开始掉头。" };
+  document.getElementById("heroRead").textContent = reads[st.k];
+
+  function drawGauge() {
+    const svg = document.getElementById("gauge");
+    const W = Math.max(280, svg.parentElement.clientWidth), x0 = 8, x1 = W - 8, lo = -1.5, hi = 1.5;
+    svg.setAttribute("viewBox", `0 0 ${W} 72`); svg.textContent = "";
+    const X = v => x0 + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (x1 - x0);
+    const edges = [lo, P.pct.p10, P.pct.p30, P.pct.p70, P.pct.p90, hi];
+    for (let i = 0; i < 5; i++) {
+      const xa = X(edges[i]) + (i ? 1 : 0), xb = X(edges[i + 1]) - (i < 4 ? 1 : 0);
+      el("rect", { x: xa, y: 24, width: Math.max(0, xb - xa), height: 12, rx: 3, style: "fill:" + STATES[i].c }, svg);
+      const t = el("text", { x: (X(edges[i]) + X(edges[i + 1])) / 2, y: 16, "text-anchor": "middle", style: "fill:var(--ink-2);font-size:12px" }, svg);
+      t.textContent = STATES[i].k;
+    }
+    [P.pct.p10, P.pct.p30, P.pct.p70, P.pct.p90].forEach(v => {
+      const t = el("text", { x: X(v), y: 66, "text-anchor": "middle", style: "fill:var(--muted);font-size:11px" }, svg);
+      t.textContent = fmt.s(v);
+    });
+    const mx = X(s5);
+    el("line", { x1: mx, x2: mx, y1: 20, y2: 40, style: "stroke:var(--ink);stroke-width:2" }, svg);
+    el("path", { d: `M${mx - 6},${51} L${mx + 6},${51} L${mx},${43} Z`, style: "fill:var(--ink)" }, svg);
+  }
+  drawGauge();
+
+  /* ---------- tiles ---------- */
+  const avg = (arr, a, b) => { let s = 0, n = 0; for (let i = a; i <= b; i++) if (arr[i] != null) { s += arr[i]; n++; } return n ? s / n : null; };
+  const TILES = [
+    { k: "涨停家数", a: R.up, f: fmt.int, dd: (v, m) => (v - m >= 0 ? "+" : "−") + Math.abs(Math.round(v - m)) },
+    { k: "跌停家数", a: R.dn, f: fmt.int, dd: (v, m) => (v - m >= 0 ? "+" : "−") + Math.abs(Math.round(v - m)) },
+    { k: "炸板率", a: R.brk, f: fmt.pct0, dd: (v, m) => (v - m >= 0 ? "+" : "−") + Math.abs(Math.round((v - m) * 100)) + " 个百分点" },
+    { k: "最高连板", a: R.stk, f: v => v + " 板", dd: (v, m) => (v - m >= 0 ? "+" : "−") + Math.abs(v - m).toFixed(1) },
+    { k: "昨日涨停今日", a: R.prem, f: fmt.pp, dd: (v, m) => (v - m >= 0 ? "+" : "−") + Math.abs((v - m) * 100).toFixed(2) + " 个百分点" },
+    { k: "上涨家数占比", a: R.pu, f: fmt.pct0, dd: (v, m) => (v - m >= 0 ? "+" : "−") + Math.abs(Math.round((v - m) * 100)) + " 个百分点" },
+    { k: "成交额", a: R.to, f: fmt.to, dd: (v, m) => (v / m - 1 >= 0 ? "+" : "−") + Math.abs((v / m - 1) * 100).toFixed(0) + "%" }];
+  const tiles = document.getElementById("tiles");
+  TILES.forEach(t => {
+    const v = t.a[last], m = avg(t.a, last - 20, last - 1);
+    const box = document.createElement("div"); box.className = "tile";
+    const k = document.createElement("div"); k.className = "k"; k.textContent = t.k;
+    const vv = document.createElement("div"); vv.className = "v"; vv.textContent = t.f(v);
+    const d = document.createElement("div"); d.className = "d"; d.textContent = "较 20 日均值 " + (m == null || v == null ? "–" : t.dd(v, m));
+    box.append(k, vv, d);
+    const svg = el("svg", { viewBox: "0 0 160 30", preserveAspectRatio: "none", "aria-hidden": "true" });
+    const a0 = Math.max(0, N - 60), vals = t.a.slice(a0).map(x => x == null ? null : x);
+    const lo = Math.min(...vals.filter(x => x != null)), hi = Math.max(...vals.filter(x => x != null));
+    let dstr = ""; vals.forEach((y, i) => { if (y == null) return; const X = 2 + i / (vals.length - 1) * 152, Y = 26 - (hi > lo ? (y - lo) / (hi - lo) : 0.5) * 22; dstr += (dstr ? "L" : "M") + X.toFixed(1) + "," + Y.toFixed(1); });
+    el("path", { d: dstr, style: "fill:none;stroke:var(--muted);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round", "vector-effect": "non-scaling-stroke" }, svg);
+    const ly = vals[vals.length - 1];
+    if (ly != null) el("circle", { cx: 154, cy: 26 - (hi > lo ? (ly - lo) / (hi - lo) : 0.5) * 22, r: 2.6, style: "fill:var(--accent)" }, svg);
+    box.appendChild(svg);
+    tiles.appendChild(box);
+  });
+
+  /* ---------- time charts ---------- */
+  let span = 250, hoverIdx = null;
+  const charts = [];
+  const tip = document.getElementById("tip");
+  function window_() { const a = span ? Math.max(0, N - span) : 0; return [a, last]; }
+  function niceTicks(lo, hi, n) {
+    const raw = (hi - lo) / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+    const step = (m < 1.5 ? 1 : m < 3 ? 2 : m < 7 ? 5 : 10) * p, out = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10));
+    return out;
+  }
+  function dateTicks(a, b, W) {
+    const n = Math.max(2, Math.floor(W / 110)), out = [], spanD = b - a;
+    const monthly = spanD < 400, step = Math.max(1, Math.round(spanD / n));
+    let lastLab = "";
+    for (let i = a; i <= b; i++) {
+      const d = R.d[i], lab = monthly ? d.slice(0, 7) : d.slice(0, 4);
+      const prev = i > a ? (monthly ? R.d[i - 1].slice(0, 7) : R.d[i - 1].slice(0, 4)) : null;
+      if (prev !== null && lab !== prev && lab !== lastLab) { out.push([i, monthly ? d.slice(2, 7).replace("-", "/") : d.slice(0, 4)]); lastLab = lab; }
+    }
+    const keep = Math.ceil(out.length / n);
+    return out.filter((_, j) => j % keep === 0);
+  }
+  function makeChart(id, opts) {
+    const host = document.getElementById(id);
+    const c = { host, opts, svg: null, X: null, a: 0, b: 0, xh: [] };
+    charts.push(c);
+    host.addEventListener("pointermove", e => { if (!c.X) return; const r = c.svg.getBoundingClientRect(); setHover(c.inv(e.clientX - r.left), e.clientX, e.clientY); });
+    host.addEventListener("pointerleave", () => setHover(null));
+    host.addEventListener("keydown", e => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      const [a, b] = window_(); let i = hoverIdx == null ? b : hoverIdx + (e.key === "ArrowLeft" ? -1 : 1);
+      i = Math.max(a, Math.min(b, i)); const r = host.getBoundingClientRect();
+      setHover(i, r.left + c.X(i) * r.width / c.W, r.top + 20);
+    });
+    host.addEventListener("blur", () => setHover(null));
+    return c;
+  }
+  function draw(c) {
+    const W = Math.max(300, c.host.clientWidth), H = c.opts.h, m = { l: 44, r: 10, t: 8, b: 22 };
+    const [a, b] = window_(); c.a = a; c.b = b; c.W = W;
+    c.host.textContent = "";
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H, role: "img", "aria-label": c.opts.label }, c.host);
+    c.svg = svg;
+    const X = i => m.l + (i - a) / Math.max(1, b - a) * (W - m.l - m.r);
+    c.X = X; c.inv = px => Math.max(a, Math.min(b, Math.round(a + (px * W / svg.getBoundingClientRect().width - m.l) / (W - m.l - m.r) * (b - a))));
+    const yr = c.opts.yrange(a, b), Y = v => m.t + (1 - (v - yr[0]) / (yr[1] - yr[0])) * (H - m.t - m.b);
+    c.opts.bands && c.opts.bands(svg, Y, m, W, yr);
+    niceTicks(yr[0], yr[1], c.opts.nt || 4).forEach(v => {
+      el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: v === 0 && c.opts.zero ? "base" : "grid" }, svg);
+      const t = el("text", { x: m.l - 6, y: Y(v) + 3.5, "text-anchor": "end", class: "tick" }, svg); t.textContent = c.opts.yfmt(v);
+    });
+    dateTicks(a, b, W).forEach(([i, lab]) => { const t = el("text", { x: X(i), y: H - 5, "text-anchor": "middle", class: "tick" }, svg); t.textContent = lab; });
+    c.opts.marks(svg, X, Y, a, b, W, H, m);
+    c.xh = el("line", { y1: m.t, y2: H - m.b, class: "xhair", visibility: "hidden" }, svg);
+    c.dot = c.opts.dot ? el("circle", { r: 4.5, style: "fill:var(--accent);stroke:var(--surface);stroke-width:2", visibility: "hidden" }, svg) : null;
+    c.Y = Y;
+  }
+  function linePath(arr, X, Y, a, b) {
+    let d = "", pen = false;
+    for (let i = a; i <= b; i++) { const v = arr[i]; if (v == null) { pen = false; continue; } d += (pen ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1); pen = true; }
+    return d;
+  }
+  function range(arr, a, b, pad) {
+    let lo = Infinity, hi = -Infinity; for (let i = a; i <= b; i++) { const v = arr[i]; if (v == null) continue; if (v < lo) lo = v; if (v > hi) hi = v; }
+    const p = (hi - lo) * pad; return [lo - p, hi + p];
+  }
+
+  makeChart("cSent", {
+    h: 230, label: "情绪综合分 5 日均值走势", zero: true, nt: 4, dot: R.s5,
+    yrange: (a, b) => { const r = range(R.s5, a, b, 0.08); return [Math.min(r[0], P.pct.p10 - 0.1), Math.max(r[1], P.pct.p90 + 0.1)]; },
+    yfmt: v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1),
+    bands: (svg, Y, m, W, yr) => {
+      el("rect", { x: m.l, width: W - m.l - m.r, y: Y(Math.min(yr[1], Math.max(P.pct.p10, yr[0]))), height: Math.max(0, Y(yr[0]) - Y(Math.min(yr[1], Math.max(P.pct.p10, yr[0])))), style: "fill:var(--ice-wash)" }, svg);
+      el("rect", { x: m.l, width: W - m.l - m.r, y: Y(yr[1]), height: Math.max(0, Y(Math.max(yr[0], Math.min(P.pct.p90, yr[1]))) - Y(yr[1])), style: "fill:var(--hot-wash)" }, svg);
+    },
+    marks: (svg, X, Y, a, b) => {
+      el("path", { d: linePath(R.s5, X, Y, a, b), style: "fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round" }, svg);
+      el("circle", { cx: X(b), cy: Y(R.s5[b]), r: 4.5, style: "fill:var(--accent);stroke:var(--surface);stroke-width:2" }, svg);
+    }
+  });
+  makeChart("cIdx", {
+    h: 160, label: "国证2000指数走势", nt: 3, dot: R.gz,
+    yrange: (a, b) => range(R.gz, a, b, 0.06),
+    yfmt: v => Math.round(v).toLocaleString("zh-CN"),
+    marks: (svg, X, Y, a, b) => {
+      el("path", { d: linePath(R.gz, X, Y, a, b), style: "fill:none;stroke:var(--ink-2);stroke-width:1.6;stroke-linejoin:round" }, svg);
+    }
+  });
+  makeChart("cLim", {
+    h: 190, label: "涨停与跌停家数", zero: true, nt: 4,
+    yrange: (a, b) => { const g = groups(a, b); let hi = 0, lo = 0; g.forEach(x => { hi = Math.max(hi, x.up); lo = Math.max(lo, x.dn); }); return [-lo * 1.08, hi * 1.08]; },
+    yfmt: v => Math.abs(Math.round(v)).toLocaleString("zh-CN"),
+    marks: (svg, X, Y, a, b, W, H, m) => {
+      const g = groups(a, b), bw = Math.max(1, Math.min(24, (W - m.l - m.r) / g.length - (g.length > 150 ? 0.5 : 2)));
+      g.forEach(x => {
+        const cx = X((x.i0 + x.i1) / 2);
+        if (x.up > 0) el("rect", { x: cx - bw / 2, y: Y(x.up), width: bw, height: Math.max(0.5, Y(0) - Y(x.up)), style: "fill:var(--up)" }, svg);
+        if (x.dn > 0) el("rect", { x: cx - bw / 2, y: Y(0), width: bw, height: Math.max(0.5, Y(-x.dn) - Y(0)), style: "fill:var(--down)" }, svg);
+      });
+    }
+  });
+  function groups(a, b) {
+    const weekly = b - a > 260, out = [];
+    document.getElementById("aggNote").textContent = weekly ? "范围较长时按周平均" : "";
+    if (!weekly) { for (let i = a; i <= b; i++) out.push({ i0: i, i1: i, up: R.up[i], dn: R.dn[i] }); return out; }
+    let s = a;
+    for (let i = a; i <= b; i++) {
+      const wk = i === b || weekKey(R.d[i + 1]) !== weekKey(R.d[i]);
+      if (wk) { let u = 0, d = 0; for (let j = s; j <= i; j++) { u += R.up[j]; d += R.dn[j]; } const n = i - s + 1; out.push({ i0: s, i1: i, up: u / n, dn: d / n }); s = i + 1; }
+    }
+    return out;
+  }
+  function weekKey(ds) { const t = Date.parse(ds + "T00:00:00Z"); return Math.floor((t / 86400000 + 3) / 7); }
+
+  function setHover(i, cx, cy) {
+    hoverIdx = i;
+    charts.forEach(c => {
+      if (!c.xh) return;
+      if (i == null) { c.xh.setAttribute("visibility", "hidden"); c.dot && c.dot.setAttribute("visibility", "hidden"); return; }
+      const x = c.X(i); c.xh.setAttribute("x1", x); c.xh.setAttribute("x2", x); c.xh.setAttribute("visibility", "visible");
+      if (c.dot) { const v = c.opts.dot[i]; if (v != null) { c.dot.setAttribute("cx", x); c.dot.setAttribute("cy", c.Y(v)); c.dot.setAttribute("visibility", "visible"); } else c.dot.setAttribute("visibility", "hidden"); }
+    });
+    if (i == null) { tip.hidden = true; return; }
+    tip.textContent = "";
+    const t = document.createElement("div"); t.className = "t"; t.textContent = R.d[i]; tip.appendChild(t);
+    const st_ = state(R.s5[i]);
+    const rows = [
+      ["var(--accent)", "情绪分" + (st_ ? "（" + st_.k + "）" : ""), fmt.s(R.s5[i])],
+      ["var(--ink-2)", "国证 2000", fmt.idx(R.gz[i])],
+      ["var(--up)", "涨停", fmt.int(R.up[i])],
+      ["var(--down)", "跌停", fmt.int(R.dn[i])],
+      [null, "炸板率", fmt.pct0(R.brk[i])],
+      [null, "最高连板", R.stk[i] + " 板"],
+      [null, "成交额", fmt.to(R.to[i])]];
+    rows.forEach(([col, name, val]) => {
+      const r = document.createElement("div"); r.className = "r";
+      const k = document.createElement("span"); if (col) { k.className = "key-line"; k.style.background = col; }
+      const n = document.createElement("span"); n.textContent = name;
+      const b = document.createElement("b"); b.textContent = val;
+      r.append(k, n, b); tip.appendChild(r);
+    });
+    tip.hidden = false;
+    const tw = tip.offsetWidth, th = tip.offsetHeight, vw = document.documentElement.clientWidth;
+    let left = cx + 14; if (left + tw > vw - 8) left = cx - tw - 14;
+    tip.style.left = Math.max(8, left) + "px"; tip.style.top = Math.max(8, cy - th / 2) + "px";
+  }
+  function redraw() { charts.forEach(draw); }
+  document.querySelectorAll("#range button").forEach(btn => btn.addEventListener("click", () => {
+    span = +btn.dataset.n;
+    document.querySelectorAll("#range button").forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+    try { localStorage.setItem("sent_span", String(span)); } catch (e) {}
+    setHover(null); redraw();
+  }));
+  try { const sv = localStorage.getItem("sent_span"); if (sv !== null) { const btn = document.querySelector(`#range button[data-n="${sv}"]`); if (btn) { span = +sv; document.querySelectorAll("#range button").forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false")); } } } catch (e) {}
+  redraw();
+  let rt = null; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => { redraw(); drawGauge(); }, 80); }).observe(document.querySelector(".wrap"));
+
+  /* ---------- evidence ---------- */
+  const evHost = document.getElementById("evidence");
+  const bucketName = ["冰点（最低 20%）", "第 2 档", "第 3 档", "第 4 档", "过热（最高 20%）"];
+  Object.entries(P.evidence).forEach(([label, rows]) => {
+    const box = document.createElement("div"); box.style.minWidth = "0";
+    const h = document.createElement("div"); h.className = "sub"; h.style.marginBottom = "6px"; h.textContent = label; box.appendChild(h);
+    const wrap = document.createElement("div"); wrap.className = "scroll";
+    const tb = document.createElement("table");
+    const head = document.createElement("tr"); ["情绪分档", "未来 20 日", "", "上涨概率"].forEach(x => { const th = document.createElement("th"); th.textContent = x; head.appendChild(th); });
+    const thead = document.createElement("thead"); thead.appendChild(head); tb.appendChild(thead);
+    const body = document.createElement("tbody");
+    rows.forEach((r, j) => {
+      const tr = document.createElement("tr");
+      const c0 = document.createElement("td"); c0.textContent = bucketName[j];
+      const c1 = document.createElement("td"); c1.textContent = (r.mean >= 0 ? "+" : "−") + Math.abs(r.mean * 100).toFixed(1) + "%";
+      const c2 = document.createElement("td"); c2.className = "bar-cell";
+      const mini = document.createElement("div"); mini.className = "mini";
+      const z = document.createElement("div"); z.className = "z";
+      const bar = document.createElement("div"); bar.className = "b" + (r.mean < 0 ? " neg" : "");
+      const w = Math.min(50, Math.abs(r.mean) / 0.06 * 50);
+      bar.style.width = w + "%"; bar.style.left = (r.mean >= 0 ? 50 : 50 - w) + "%";
+      mini.append(z, bar); c2.appendChild(mini);
+      const c3 = document.createElement("td"); c3.textContent = Math.round(r.hit * 100) + "%";
+      tr.append(c0, c1, c2, c3); body.appendChild(tr);
+    });
+    tb.appendChild(body); wrap.appendChild(tb); box.appendChild(wrap); evHost.appendChild(box);
+  });
+
+  /* ---------- monthly table ---------- */
+  const mt = document.getElementById("mtab");
+  const mh = document.createElement("thead"), hr = document.createElement("tr");
+  ["月份", "日均涨停", "日均跌停", "炸板率", "最高连板", "昨日涨停今日", "上涨家数", "日均成交额", "情绪分", "状态"].forEach(x => { const th = document.createElement("th"); th.textContent = x; hr.appendChild(th); });
+  mh.appendChild(hr); mt.appendChild(mh);
+  const mb = document.createElement("tbody");
+  P.monthly.slice().reverse().forEach(r => {
+    const tr = document.createElement("tr"); const s_ = state(r.s5);
+    [r.m, fmt.int(r.up), fmt.int(r.dn), fmt.pct0(r.brk), r.stk + " 板", fmt.pp(r.prem), fmt.pct0(r.pu), fmt.to(r.to), fmt.s(r.s5), s_ ? s_.k : "–"].forEach(v => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); });
+    mb.appendChild(tr);
+  });
+  mt.appendChild(mb);
+})();
+</script>
