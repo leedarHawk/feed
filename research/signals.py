@@ -76,3 +76,35 @@ def size_neutral(B, F, signs, U, n_buckets=10, junk_cut=0.3):
         pct = r / np.maximum(n - 1, 1)
         out = np.where(np.isnan(pct), out, pct)
     return out
+
+
+def dividend_yield_ttm(B, seed=0):
+    """TTM cash dividends / market cap, known from the trading day after the implementation notice.
+    A tiny random tie-break separates non-payers (all zero)."""
+    import os
+    import polars as pl
+    import lib
+    dv = pl.read_parquet(os.path.join(lib.DATA, "dividends.parquet")).filter(
+        (pl.col("status") == "实施方案") & pl.col("implementation_pub_date").is_not_null())
+    cidx = {c: i for i, c in enumerate(B.codes)}
+    T, N = len(B.dates), len(B.codes)
+    E = np.zeros((T, N))
+    for c, pub, cash in zip(dv["code"].to_list(), dv["implementation_pub_date"].to_list(), dv["cash_total_10k_cny"].to_list()):
+        if c in cidx and cash is not None:
+            k = int(np.searchsorted(B.dates, np.datetime64(pub, "D"), side="right"))
+            if k < T:
+                E[k, cidx[c]] += cash
+    cs = np.cumsum(E, axis=0)
+    ttm = cs - lib.shift(cs, 243)
+    ttm[:243] = cs[:243]
+    rng = np.random.default_rng(seed)
+    return ttm / 1e4 / B.P["market_cap"] + rng.random((T, N)) * 1e-9
+
+
+def mainboard_scores(B, F, signs, U):
+    """V0 (drop worst 30% by composite, rank by small) and V9 (... rank by 0.5 small + 0.5 dividend yield)."""
+    comp_r = backtest.zrank(composite(B, F, signs, U=U), U)
+    small = backtest.zrank(-F["lmoney20"], U)
+    value = backtest.zrank(dividend_yield_ttm(B), U)
+    k30 = comp_r > -0.4
+    return {"V0": np.where(k30, small, np.nan), "V9": np.where(k30, 0.5 * small + 0.5 * value, np.nan)}

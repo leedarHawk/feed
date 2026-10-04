@@ -81,7 +81,8 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         target = None
         n_sel = int(round(expo * n_hold)) if exposure_trade == "names" else n_hold
         held = np.where(w > 1e-9)[0]
-        if scheduled or reg_chg or (expo_chg and exposure_trade == "reselect"):
+        flat_reentry = expo_chg and exposure_trade == "rescale" and w.sum() < 1e-9 and expo > 0
+        if scheduled or reg_chg or (expo_chg and exposure_trade == "reselect") or flat_reentry:
             last_expo = expo
             last_reg = reg
             s = score[t - 1]
