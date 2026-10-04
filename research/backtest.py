@@ -36,11 +36,13 @@ def zrank(x, U):
 
 
 def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=None, return_weights=False,
-        exposure=None, regime=None):
+        exposure=None, regime=None, exposure_trade="reselect"):
     """score[t] is known at the close of t. Returns dict with daily net returns, turnover, etc.
     exposure[t] (optional, known at the close of t) is the target gross weight for trades at t+1;
     a change in exposure forces a rebalance on the next open. A change in `regime[t]` (any label array,
-    known at the close of t) also forces a rebalance, e.g. when the score switches between two models."""
+    known at the close of t) also forces a rebalance, e.g. when the score switches between two models.
+    exposure_trade: "reselect" re-runs name selection when exposure changes; "rescale" keeps the
+    current names and scales every position to the new exposure (used for gradual de-risking)."""
     U = B.U if U is None else U
     dates = B.dates
     t0 = int(np.searchsorted(dates, np.datetime64(start)))
@@ -65,8 +67,11 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         # 2. rebalance
         expo = 1.0 if exposure is None else float(exposure[t - 1])
         reg = None if regime is None else regime[t - 1]
-        if ((t - max(t0, 1)) % rebal == 0 or (last_expo is not None and expo != last_expo)
-                or (last_reg is not None and reg != last_reg)):
+        scheduled = (t - max(t0, 1)) % rebal == 0
+        expo_chg = last_expo is not None and expo != last_expo
+        reg_chg = last_reg is not None and reg != last_reg
+        target = None
+        if scheduled or reg_chg or (expo_chg and exposure_trade == "reselect"):
             last_expo = expo
             last_reg = reg
             s = score[t - 1]
@@ -88,23 +93,30 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
                         cs.add(j)
                 target = np.zeros(N)
                 target[chosen] = expo / n_hold
-                d = target - w
-                buy = (d > 1e-12) & B.can_buy_open[t]
-                sell = (d < -1e-12) & B.can_sell_open[t]
-                dd = np.zeros(N)
-                dd[sell] = d[sell]
-                sell_tot = -dd.sum()
-                cash = 1.0 - w.sum()
-                avail = cash + sell_tot
-                want = d[buy].sum()
-                scale = min(1.0, avail / want) if want > 1e-12 else 0.0
-                dd[buy] = d[buy] * scale
-                w = np.maximum(w + dd, 0.0)
-                sb, ss = dd[dd > 0].sum(), -dd[dd < 0].sum()
-                stamp = costs.stamp_new if t >= stamp_day else costs.stamp_old
-                cost = sb * (costs.commission + costs.slippage) + ss * (costs.commission + costs.slippage + stamp)
-                nav_mult *= (1.0 - cost)
-                w = w * (1.0 - cost)  # costs paid out of the portfolio
+        elif expo_chg and exposure_trade == "rescale":
+            # keep the same names, scale every position to the new gross exposure
+            last_expo = expo
+            tot = w.sum()
+            if tot > 1e-12:
+                target = w * (expo / tot)
+        if target is not None:
+            d = target - w
+            buy = (d > 1e-12) & B.can_buy_open[t]
+            sell = (d < -1e-12) & B.can_sell_open[t]
+            dd = np.zeros(N)
+            dd[sell] = d[sell]
+            sell_tot = -dd.sum()
+            cash = 1.0 - w.sum()
+            avail = cash + sell_tot
+            want = d[buy].sum()
+            scale = min(1.0, avail / want) if want > 1e-12 else 0.0
+            dd[buy] = d[buy] * scale
+            w = np.maximum(w + dd, 0.0)
+            sb, ss = dd[dd > 0].sum(), -dd[dd < 0].sum()
+            stamp = costs.stamp_new if t >= stamp_day else costs.stamp_old
+            cost = sb * (costs.commission + costs.slippage) + ss * (costs.commission + costs.slippage + stamp)
+            nav_mult *= (1.0 - cost)
+            w = w * (1.0 - cost)  # costs paid out of the portfolio
         # 3. intraday
         g2 = float(w @ idr[t])
         w = w * (1.0 + idr[t]) / (1.0 + g2)
