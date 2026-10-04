@@ -40,7 +40,7 @@ def zrank(x, U):
 
 
 def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=None, return_weights=False,
-        exposure=None, regime=None, exposure_trade="reselect"):
+        exposure=None, regime=None, exposure_trade="reselect", rebal_offset=0):
     """score[t] is known at the close of t. Returns dict with daily net returns, turnover, etc.
     exposure[t] (optional, known at the close of t) is the target gross weight for trades at t+1;
     a change in exposure forces a rebalance on the next open. A change in `regime[t]` (any label array,
@@ -75,7 +75,7 @@ def run(B, score, start, end, n_hold=50, rebal=5, buffer=1.5, costs=Costs(), U=N
         # 2. rebalance
         expo = 1.0 if exposure is None else float(exposure[t - 1])
         reg = None if regime is None else regime[t - 1]
-        scheduled = (t - max(t0, 1)) % rebal == 0
+        scheduled = (t - max(t0, 1)) % rebal == rebal_offset % rebal or t == max(t0, 1)
         expo_chg = last_expo is not None and expo != last_expo
         reg_chg = last_reg is not None and reg != last_reg
         target = None
