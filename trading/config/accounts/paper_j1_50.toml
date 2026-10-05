@@ -1,0 +1,12 @@
+# Paper account for the pre-registered main version (final_spec.py "MAIN J1-50").
+# Strategy parameters are read from research/final_spec.py; only the schedule offset is chosen here.
+[account]
+name = "paper_j1_50"
+broker = "paper"
+capital = 500000
+start = "2026-10-08"          # first trading day after the 2026 National Day closure
+
+[strategy]
+version = "MAIN J1-50"
+anchor = "2020-04-01"         # trading-day index 0 of the 20-day rebalance cycle (the research run start)
+offset = 0                    # research tested 0 / 5 / 10 / 15; one account trades one schedule

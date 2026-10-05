@@ -1,0 +1,19 @@
+# A real account traded through miniQMT (xtquant). The adapter is untested against a live terminal:
+# keep allow_live = false (dry run) until it has run correctly in a simulated QMT account.
+[account]
+name = "qmt_example"
+broker = "qmt"
+capital = 500000
+start = "2026-10-08"
+enabled = false
+
+[strategy]
+version = "MAIN J1-50"
+anchor = "2020-04-01"
+offset = 0
+
+[execution]
+qmt_path = 'D:\国金QMT交易端\userdata_mini'
+qmt_account = "000000000"
+allow_live = false
+cash_buffer = 0.005

@@ -1,0 +1,18 @@
+# Weekday exchange closures (SSE/SZSE) for days after the last date in the price data.
+# Past trading days come from the data itself; this file is only used to project the calendar forward
+# (next trading day, the January exit window). Update it when the exchanges publish the next year's schedule.
+#
+# 2026 National Day: closed 2026-10-01 .. 10-07, trading resumes Thu 2026-10-08
+#   (SSE/SZSE/BSE notice of 2026-09-17, "关于2026年中秋节、国庆节休市安排的公告").
+# 2027: not announced as of 2026-10-05. Only New Year's Day is entered; the January exit window of 2027
+#   (last 10 trading days up to Jan 31) does not depend on the Spring Festival dates (Feb 2027).
+
+[years.2026]
+confirmed = true
+closed = ["2026-01-01", "2026-01-02", "2026-02-16", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20",
+          "2026-02-23", "2026-04-06", "2026-05-01", "2026-05-04", "2026-05-05", "2026-06-19", "2026-09-25",
+          "2026-10-01", "2026-10-02", "2026-10-05", "2026-10-06", "2026-10-07"]
+
+[years.2027]
+confirmed = false
+closed = ["2027-01-01"]

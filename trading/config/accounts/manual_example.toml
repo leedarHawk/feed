@@ -1,0 +1,21 @@
+# A real account traded by hand from the order sheet. Copy, rename, set enabled = true.
+# Daily: after the close export holdings from the broker client -> `import-holdings`, then `run`;
+# next morning enter trading/var/accounts/<name>/orders/<day>_preliminary.csv (sells first, then buys).
+[account]
+name = "manual_example"
+broker = "manual"
+capital = 500000              # initial capital, for the return series
+start = "2026-10-08"
+enabled = false
+
+[strategy]
+version = "MAIN J1-50"
+anchor = "2020-04-01"
+offset = 0
+
+[execution]
+limit_band = 0.03             # limit price = reference price +/- 3% (inside the +/-10% price limits)
+cash_buffer = 0.005           # keep 0.5% of NAV back from buys for fees and price moves
+
+[risk]
+drawdown_halt = -0.30

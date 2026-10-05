@@ -1,0 +1,13 @@
+# Paper account for the no-dividend control (final_spec.py "CTRL V0-50 (no dividend)"), the base the
+# GP research moved to after the sealed test. Its +22.7% on 2025-01..2026-09 is known, so it is not a clean
+# out-of-sample estimate any more; this account's forward record from 2026-10-08 is.
+[account]
+name = "paper_v0_50"
+broker = "paper"
+capital = 500000
+start = "2026-10-08"
+
+[strategy]
+version = "CTRL V0-50 (no dividend)"
+anchor = "2020-04-01"
+offset = 0

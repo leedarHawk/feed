@@ -1,0 +1,5 @@
+# runtime state: ledgers, price cache, reports, order sheets, snapshots, replays
+var/
+__pycache__/
+*.pyc
+.pytest_cache/

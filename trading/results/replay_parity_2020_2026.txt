@@ -1,0 +1,129 @@
+MAIN J1-50 | offset 0 | board lots: 3796 fills, traded 69,789,302, fees+stamp 48,672
+  system   whole run  ann +26.6%  vol 17.7%  sharpe 1.43  mdd -18.2%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +34.4%  vol 18.1%  sharpe 1.73  mdd -18.2%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann  +7.7%  vol 16.5%  sharpe 0.54  mdd -17.4%  | universe EW +10.2%
+  research whole run  ann +26.6%  vol 17.7%  sharpe 1.42  mdd -18.1%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +34.3%  vol 18.1%  sharpe 1.72  mdd -18.1%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann  +7.7%  vol 16.5%  sharpe 0.53  mdd -17.4%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999951; max daily gap 0.059%
+MAIN J1-50 | offset 5 | board lots: 3754 fills, traded 68,078,975, fees+stamp 47,556
+  system   whole run  ann +26.8%  vol 17.7%  sharpe 1.43  mdd -18.2%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +32.8%  vol 18.0%  sharpe 1.67  mdd -18.2%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +11.8%  vol 16.6%  sharpe 0.75  mdd -17.5%  | universe EW +10.2%
+  research whole run  ann +26.8%  vol 17.6%  sharpe 1.44  mdd -18.2%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +32.8%  vol 18.0%  sharpe 1.67  mdd -18.2%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +11.8%  vol 16.6%  sharpe 0.76  mdd -17.4%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999955; max daily gap 0.058%
+MAIN J1-50 | offset 10 | board lots: 3626 fills, traded 60,341,226, fees+stamp 43,000
+  system   whole run  ann +23.9%  vol 17.7%  sharpe 1.30  mdd -18.3%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +29.0%  vol 18.0%  sharpe 1.51  mdd -18.3%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +11.0%  vol 16.9%  sharpe 0.71  mdd -17.1%  | universe EW +10.2%
+  research whole run  ann +23.8%  vol 17.7%  sharpe 1.30  mdd -18.4%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +28.9%  vol 18.0%  sharpe 1.50  mdd -18.4%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +11.0%  vol 16.9%  sharpe 0.70  mdd -17.0%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999955; max daily gap 0.051%
+MAIN J1-50 | offset 15 | board lots: 3836 fills, traded 71,997,898, fees+stamp 49,820
+  system   whole run  ann +28.1%  vol 17.7%  sharpe 1.49  mdd -20.0%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +34.2%  vol 18.0%  sharpe 1.72  mdd -20.0%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +13.0%  vol 16.7%  sharpe 0.82  mdd -16.3%  | universe EW +10.2%
+  research whole run  ann +28.0%  vol 17.7%  sharpe 1.49  mdd -19.9%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +34.1%  vol 18.0%  sharpe 1.72  mdd -19.9%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +12.9%  vol 16.7%  sharpe 0.81  mdd -16.3%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999950; max daily gap 0.064%
+ALT  J1-30 | offset 0 | board lots: 2569 fills, traded 70,033,827, fees+stamp 46,200
+  system   whole run  ann +24.9%  vol 18.0%  sharpe 1.33  mdd -18.6%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +32.8%  vol 18.4%  sharpe 1.64  mdd -17.8%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann  +5.7%  vol 16.8%  sharpe 0.42  mdd -18.6%  | universe EW +10.2%
+  research whole run  ann +24.9%  vol 18.0%  sharpe 1.33  mdd -18.6%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +32.8%  vol 18.4%  sharpe 1.63  mdd -17.8%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann  +5.8%  vol 16.8%  sharpe 0.42  mdd -18.6%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999936; max daily gap 0.056%
+ALT  J1-30 | offset 5 | board lots: 2550 fills, traded 69,717,613, fees+stamp 45,967
+  system   whole run  ann +25.2%  vol 18.2%  sharpe 1.33  mdd -20.0%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +32.7%  vol 18.6%  sharpe 1.62  mdd -19.8%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann  +6.7%  vol 17.2%  sharpe 0.47  mdd -20.0%  | universe EW +10.2%
+  research whole run  ann +25.2%  vol 18.2%  sharpe 1.33  mdd -20.0%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +32.7%  vol 18.5%  sharpe 1.62  mdd -19.7%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann  +6.8%  vol 17.1%  sharpe 0.47  mdd -20.0%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999942; max daily gap 0.048%
+ALT  J1-30 | offset 10 | board lots: 2474 fills, traded 62,790,164, fees+stamp 42,011
+  system   whole run  ann +22.0%  vol 18.2%  sharpe 1.18  mdd -19.7%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +28.6%  vol 18.4%  sharpe 1.46  mdd -18.9%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann  +5.6%  vol 17.4%  sharpe 0.40  mdd -19.7%  | universe EW +10.2%
+  research whole run  ann +21.9%  vol 18.2%  sharpe 1.18  mdd -19.7%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +28.6%  vol 18.4%  sharpe 1.46  mdd -18.9%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann  +5.5%  vol 17.4%  sharpe 0.40  mdd -19.7%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999939; max daily gap 0.056%
+ALT  J1-30 | offset 15 | board lots: 2559 fills, traded 71,943,958, fees+stamp 46,899
+  system   whole run  ann +26.5%  vol 18.0%  sharpe 1.40  mdd -19.5%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +33.5%  vol 18.4%  sharpe 1.66  mdd -17.2%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann  +9.4%  vol 17.1%  sharpe 0.61  mdd -19.5%  | universe EW +10.2%
+  research whole run  ann +26.4%  vol 18.0%  sharpe 1.39  mdd -19.5%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +33.3%  vol 18.4%  sharpe 1.66  mdd -17.1%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann  +9.4%  vol 17.1%  sharpe 0.61  mdd -19.5%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999938; max daily gap 0.051%
+CTRL V9-50 (no Jan exit) | offset 0 | board lots: 3397 fills, traded 54,814,941, fees+stamp 40,099
+  system   whole run  ann +25.9%  vol 17.9%  sharpe 1.38  mdd -18.2%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +30.8%  vol 18.2%  sharpe 1.56  mdd -18.2%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +13.5%  vol 16.8%  sharpe 0.84  mdd -16.8%  | universe EW +10.2%
+  research whole run  ann +25.8%  vol 17.8%  sharpe 1.38  mdd -18.1%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +30.7%  vol 18.2%  sharpe 1.56  mdd -18.1%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +13.5%  vol 16.8%  sharpe 0.84  mdd -16.8%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999952; max daily gap 0.047%
+CTRL V9-50 (no Jan exit) | offset 5 | board lots: 3442 fills, traded 56,344,236, fees+stamp 40,811
+  system   whole run  ann +26.4%  vol 17.8%  sharpe 1.41  mdd -18.2%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +30.3%  vol 18.1%  sharpe 1.56  mdd -18.2%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +16.3%  vol 16.9%  sharpe 0.98  mdd -17.1%  | universe EW +10.2%
+  research whole run  ann +26.3%  vol 17.7%  sharpe 1.41  mdd -18.2%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +30.2%  vol 18.1%  sharpe 1.55  mdd -18.2%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +16.3%  vol 16.9%  sharpe 0.98  mdd -17.1%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999951; max daily gap 0.058%
+CTRL V9-50 (no Jan exit) | offset 10 | board lots: 3350 fills, traded 50,899,890, fees+stamp 37,541
+  system   whole run  ann +23.8%  vol 18.0%  sharpe 1.28  mdd -18.4%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +26.7%  vol 18.2%  sharpe 1.39  mdd -18.4%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +16.1%  vol 17.2%  sharpe 0.96  mdd -16.5%  | universe EW +10.2%
+  research whole run  ann +23.7%  vol 17.9%  sharpe 1.28  mdd -18.3%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +26.6%  vol 18.2%  sharpe 1.39  mdd -18.3%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +16.2%  vol 17.1%  sharpe 0.96  mdd -16.5%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999955; max daily gap 0.065%
+CTRL V9-50 (no Jan exit) | offset 15 | board lots: 3475 fills, traded 57,579,797, fees+stamp 41,496
+  system   whole run  ann +27.1%  vol 18.0%  sharpe 1.42  mdd -20.0%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +30.5%  vol 18.4%  sharpe 1.54  mdd -20.0%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +18.4%  vol 16.9%  sharpe 1.09  mdd -16.3%  | universe EW +10.2%
+  research whole run  ann +27.0%  vol 18.0%  sharpe 1.42  mdd -20.0%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +30.4%  vol 18.4%  sharpe 1.54  mdd -20.0%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +18.3%  vol 16.9%  sharpe 1.08  mdd -16.2%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999952; max daily gap 0.064%
+CTRL V0-50 (no dividend) | offset 0 | board lots: 4162 fills, traded 86,846,457, fees+stamp 57,133
+  system   whole run  ann +29.6%  vol 19.2%  sharpe 1.45  mdd -19.6%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +32.5%  vol 19.5%  sharpe 1.54  mdd -19.3%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +22.0%  vol 18.5%  sharpe 1.17  mdd -19.6%  | universe EW +10.2%
+  research whole run  ann +29.4%  vol 19.2%  sharpe 1.44  mdd -19.6%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +32.3%  vol 19.4%  sharpe 1.54  mdd -19.3%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +21.9%  vol 18.4%  sharpe 1.17  mdd -19.6%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999974; max daily gap 0.047%
+CTRL V0-50 (no dividend) | offset 5 | board lots: 4151 fills, traded 83,100,694, fees+stamp 55,325
+  system   whole run  ann +28.5%  vol 19.2%  sharpe 1.41  mdd -19.3%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +30.5%  vol 19.3%  sharpe 1.48  mdd -18.9%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +23.3%  vol 18.9%  sharpe 1.20  mdd -19.3%  | universe EW +10.2%
+  research whole run  ann +28.5%  vol 19.2%  sharpe 1.40  mdd -19.2%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +30.4%  vol 19.3%  sharpe 1.48  mdd -18.9%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +23.2%  vol 18.8%  sharpe 1.20  mdd -19.2%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999971; max daily gap 0.048%
+CTRL V0-50 (no dividend) | offset 10 | board lots: 4119 fills, traded 81,812,463, fees+stamp 54,579
+  system   whole run  ann +28.5%  vol 19.4%  sharpe 1.39  mdd -20.3%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +30.4%  vol 19.5%  sharpe 1.46  mdd -20.3%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +23.5%  vol 19.2%  sharpe 1.20  mdd -19.1%  | universe EW +10.2%
+  research whole run  ann +28.5%  vol 19.4%  sharpe 1.39  mdd -20.3%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +30.3%  vol 19.5%  sharpe 1.46  mdd -20.3%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +23.5%  vol 19.2%  sharpe 1.20  mdd -19.0%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999973; max daily gap 0.061%
+CTRL V0-50 (no dividend) | offset 15 | board lots: 4215 fills, traded 93,175,616, fees+stamp 60,555
+  system   whole run  ann +31.4%  vol 19.3%  sharpe 1.51  mdd -20.4%  | universe EW  +6.8%
+  system   2020-04..2024-12 ann +35.0%  vol 19.4%  sharpe 1.64  mdd -18.9%  | universe EW  +5.6%
+  system   2025-01..2026-09 ann +22.2%  vol 19.1%  sharpe 1.15  mdd -20.4%  | universe EW +10.2%
+  research whole run  ann +31.3%  vol 19.3%  sharpe 1.51  mdd -20.3%  | universe EW  +6.8%
+  research 2020-04..2024-12 ann +34.9%  vol 19.4%  sharpe 1.64  mdd -18.8%  | universe EW  +5.6%
+  research 2025-01..2026-09 ann +22.1%  vol 19.0%  sharpe 1.15  mdd -20.3%  | universe EW +10.2%
+  same holdings at the close on 100.0% of days (mean Jaccard 1.0000); daily return corr 0.999970; max daily gap 0.091%
+summary: trading/results/replay_parity_2020_2026.csv
